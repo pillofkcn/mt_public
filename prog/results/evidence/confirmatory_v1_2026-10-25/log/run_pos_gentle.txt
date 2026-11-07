@@ -1,0 +1,84 @@
+python scripts/pos_tagging.py --dataset gentle --out-dir results/run_2026-10-25 --confirmatory
+
+STAGE pos on gentle (confirmatory): 7 configuration(s), 1334 of 1334 sentences
+  plan plan/v1.yaml sha256 34f81ee577ed14f1b5a975a05bcbc4dd3fb5f655b4644f14f48e1e964d210268
+  gold sha256 42d12cdef99bcd3160a3241ba1811fe9e7fd4b37a77f9b9e8c2852f04d69f3fa
+  downloads: none (HF_HUB_OFFLINE=1, SYNTACTIC_ANALYSIS_OFFLINE=1)
+  not run by the plan: nltk_pre (configurations.nltk_pre.datasets: ewt_test); spacy_sm (configurations.spacy_sm.datasets: ewt_test)
+rdr_ewt: building (rdrpos.RdrPosAnalyzer)
+    250/1334 sentences
+    500/1334 sentences
+    750/1334 sentences
+    1000/1334 sentences
+    1250/1334 sentences
+  rdr_ewt: 1334 sentences, UPOS 85.97
+nltk_ewt: building (nltk.NltkAnalyzer)
+    250/1334 sentences
+    500/1334 sentences
+    750/1334 sentences
+    1000/1334 sentences
+    1250/1334 sentences
+  nltk_ewt: 1334 sentences, UPOS 86.57
+udpipe_ewt: building (udpipe.UdpipeAnalyzer)
+    250/1334 sentences
+    500/1334 sentences
+    750/1334 sentences
+    1000/1334 sentences
+    1250/1334 sentences
+  udpipe_ewt: 1334 sentences, UPOS 88.13
+spacy_ewt: building (spacy.SpacyAnalyzer)
+    250/1334 sentences
+    500/1334 sentences
+    750/1334 sentences
+    1000/1334 sentences
+    1250/1334 sentences
+  spacy_ewt: 1334 sentences, UPOS 87.50
+stanza_ewt: building (stanza.StanzaAnalyzer)
+    250/1334 sentences
+    500/1334 sentences
+    750/1334 sentences
+    1000/1334 sentences
+    1250/1334 sentences
+  stanza_ewt: 1334 sentences, UPOS 91.12
+stanza_comb: building (stanza.StanzaAnalyzer)
+    250/1334 sentences
+    500/1334 sentences
+    750/1334 sentences
+    1000/1334 sentences
+    1250/1334 sentences
+  stanza_comb: 1334 sentences, UPOS 92.52
+stanza_trf: building (stanza.StanzaAnalyzer)
+
+Loading weights:   0%|          | 0/389 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 389/389 [00:00<00:00, 44928.66it/s]
+[1mElectraModel LOAD REPORT[0m from: google/electra-large-discriminator
+Key                                               | Status     |  | 
+--------------------------------------------------+------------+--+-
+electra.embeddings_project.bias                   | UNEXPECTED |  | 
+discriminator_predictions.dense_prediction.bias   | UNEXPECTED |  | 
+discriminator_predictions.dense_prediction.weight | UNEXPECTED |  | 
+discriminator_predictions.dense.bias              | UNEXPECTED |  | 
+electra.embeddings_project.weight                 | UNEXPECTED |  | 
+discriminator_predictions.dense.weight            | UNEXPECTED |  | 
+
+[3mNotes:
+- UNEXPECTED[3m	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.[0m
+    250/1334 sentences
+    500/1334 sentences
+    750/1334 sentences
+    1000/1334 sentences
+    1250/1334 sentences
+  stanza_trf: 1334 sentences, UPOS 94.12
+
+SUMMARY pos on gentle
+config | sentences | UPOS
+--- | --- | ---
+rdr_ewt | 1334 | 85.97
+nltk_ewt | 1334 | 86.57
+udpipe_ewt | 1334 | 88.13
+spacy_ewt | 1334 | 87.50
+stanza_ewt | 1334 | 91.12
+stanza_comb | 1334 | 92.52
+stanza_trf | 1334 | 94.12
+written: results/run_2026-10-25/csv/counts_pos_gentle.csv
+         results/run_2026-10-25/csv/counts_pos_gentle.prov.json

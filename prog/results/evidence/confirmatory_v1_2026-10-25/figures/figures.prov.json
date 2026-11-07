@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "run_dir": "results/run_2026-10-25",
+  "plan": {
+    "path": "plan/v1.yaml",
+    "sha256": "34f81ee577ed14f1b5a975a05bcbc4dd3fb5f655b4644f14f48e1e964d210268"
+  },
+  "tables": {
+    "csv/thesis_h1a.csv": "ee2418e428bdd4a11d1b90e0b7be51d435b5eb15a932e193c9658a012d4247a2",
+    "csv/thesis_h1b.csv": "3365a80dcecb721cf4405819dc18521bdf323c0466c91f2fdc03c42660870d67",
+    "csv/thesis_h2a.csv": "98f8ed27e8300d01ba03097028241ac559b090f3e07cb4127010d23d21eb639e",
+    "csv/thesis_h2b.csv": "6a7b80fde90cc7262dff9b756e0d31718df245f4b6a6e65cefe546075d03c8e7",
+    "csv/thesis_h2c.csv": "e12b69f3765d16304564e7ad68613f6c4cdcad5042551d630b0aa38b4a1c60bf"
+  },
+  "figures": {
+    "fig1_h1": {
+      "tables": [
+        "csv/thesis_h1a.csv",
+        "csv/thesis_h1b.csv"
+      ],
+      "files": {
+        "fig1_h1.png": "f5fa7cd7a002462c338c74f55cc81cf25ed6e013e630025fdd794882c7e2161c",
+        "fig1_h1.pdf": "403ab4a215c67ca528bbcd0f0ca5bb16dc1ba2105790d9a1d8e5e0a831c967bf"
+      },
+      "panels": {
+        "h1a/pos": {
+          "intervals": 4,
+          "notes": []
+        },
+        "h1a/dep": {
+          "intervals": 6,
+          "notes": []
+        },
+        "h1a/con": {
+          "intervals": 4,
+          "notes": []
+        },
+        "h1b": {
+          "intervals": 6,
+          "notes": []
+        }
+      }
+    },
+    "fig2_h2": {
+      "tables": [
+        "csv/thesis_h2a.csv",
+        "csv/thesis_h2b.csv"
+      ],
+      "files": {
+        "fig2_h2.png": "5bf0d774d58147e0d19ae3431f5fe6f7c19774cdd4fb6d929ed231481c4a34d9",
+        "fig2_h2.pdf": "66ef68fea78246ae526fdb2975e49f7dedb613a6146fd70e42f7f0641a51ce78"
+      },
+      "panels": {
+        "h2a/effect": {
+          "intervals": 3,
+          "notes": []
+        },
+        "h2a/criterion": {
+          "intervals": 3,
+          "notes": []
+        },
+        "h2b/effect": {
+          "intervals": 12,
+          "notes": []
+        },
+        "h2b/criterion": {
+          "intervals": 12,
+          "notes": []
+        }
+      }
+    },
+    "fig3_h2c": {
+      "tables": [
+        "csv/thesis_h2c.csv"
+      ],
+      "files": {
+        "fig3_h2c.png": "41574bfdcbba4a7fe0fba0b4dc99e23bafe5e318fc6132a3a7054e4848e3c9dc",
+        "fig3_h2c.pdf": "862293612473b054862287c6384370b9e1922989612e616cd328a51fb2e6c372"
+      },
+      "panels": {
+        "h2c/pos": {
+          "intervals": 2,
+          "notes": []
+        },
+        "h2c/dep": {
+          "intervals": 2,
+          "notes": []
+        }
+      }
+    }
+  },
+  "delta": 1.0,
+  "dpi": 300,
+  "matplotlib": "3.10.8",
+  "command": "python scripts/make_figures.py --run-dir results/run_2026-10-25",
+  "created": "2026-10-25T15:58:34+01:00"
+}

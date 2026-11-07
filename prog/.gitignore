@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.eggs/
+
+# Build
+dist/
+build/
+*.whl
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Type checking / linting
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Data: the corpora are downloaded by setup.sh and not tracked; their digests are.
+data/*.conllu
+data/*.txt
+# MCTB_en (scripts/fetch_data.py): only its digests, data/mctb_en.sha256.
+data/mctb_en/
+# A download in progress: checksum.download_verified writes <file>.part and
+# renames it only once its digest matches.
+data/*.part
+data/**/*.part
+!data/DATASET.md
+!data/*.sha256
+!data/ewt_deprel_inventory.txt
+
+# Results. New runs are ignored; the frozen runs in results/evidence/ are tracked.
+# An untracked file would make every later provenance say that prog/ has
+# uncommitted changes (git_dirty), so everything a run writes is ignored.
+results/**/*.csv
+results/**/*.json
+results/**/*.png
+!results/evidence/**
+results/run_*/
+results/run_*_full.txt
+results/smoke/
+results/scratch/
+# prog/log/ only (a pattern with a leading slash is anchored here): the frozen
+# runs keep their logs in results/evidence/*/log/.
+/log/
+
+# Locally trained models
+model_cache/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,172 @@
+{
+  "schema": 1,
+  "run_dir": "results/run_2026-10-24",
+  "plan": {
+    "path": "plan/v1.yaml",
+    "sha256": "872bad0c9ccb04e0c9656ee013a681c58c621c2ab07e46df970ee3fb840c5193"
+  },
+  "environment": {
+    "python": "3.13.0",
+    "implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel (AMD64)",
+    "libraries": {
+      "numpy": "2.4.3",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.8.0",
+      "nltk": "3.9.3",
+      "stanza": "1.11.1",
+      "torch": "2.10.0",
+      "transformers": "5.3.0",
+      "tokenizers": "0.22.2",
+      "huggingface-hub": "1.7.2",
+      "safetensors": "0.7.0",
+      "sentencepiece": "0.2.1",
+      "protobuf": "7.34.1",
+      "spacy": "3.8.11",
+      "thinc": "8.3.11",
+      "en_core_web_sm": "3.8.0",
+      "ufal.udpipe": "1.4.0.1",
+      "benepar": "0.2.0",
+      "supar": "1.1.4",
+      "torch-struct": "0.5",
+      "pyyaml": "6.0.3"
+    }
+  },
+  "offline": {
+    "HF_HUB_OFFLINE": "1",
+    "SYNTACTIC_ANALYSIS_OFFLINE": "1"
+  },
+  "stages": [
+    {
+      "key": "pos",
+      "script": "scripts/pos_tagging.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/pos_tagging.py",
+          "--dataset",
+          "ewt_test",
+          "--out-dir",
+          "results/run_2026-10-24"
+        ]
+      ],
+      "returncodes": [
+        0
+      ],
+      "logs": [
+        "log/run_pos_ewt_test.txt"
+      ],
+      "invocation": "2026-10-24T20:02:01+02:00"
+    },
+    {
+      "key": "dep",
+      "script": "scripts/dependency_parsing.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/dependency_parsing.py",
+          "--dataset",
+          "ewt_test",
+          "--out-dir",
+          "results/run_2026-10-24"
+        ]
+      ],
+      "returncodes": [
+        0
+      ],
+      "logs": [
+        "log/run_dep_ewt_test.txt"
+      ],
+      "invocation": "2026-10-24T20:02:01+02:00"
+    },
+    {
+      "key": "con",
+      "script": "scripts/constituency_parsing.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/constituency_parsing.py",
+          "--gold",
+          "wsj01",
+          "--out-dir",
+          "results/run_2026-10-24"
+        ]
+      ],
+      "returncodes": [
+        0
+      ],
+      "logs": [
+        "log/run_con_wsj_01.txt"
+      ],
+      "invocation": "2026-10-24T20:02:01+02:00"
+    },
+    {
+      "key": "analyze",
+      "script": "scripts/analyze.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/analyze.py",
+          "--run-dir",
+          "results/run_2026-10-24"
+        ]
+      ],
+      "returncodes": [
+        0
+      ],
+      "logs": [
+        "log/run_analyze.txt"
+      ],
+      "invocation": "2026-10-24T20:02:01+02:00"
+    },
+    {
+      "key": "figures",
+      "script": "scripts/make_figures.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/make_figures.py",
+          "--run-dir",
+          "results/run_2026-10-24"
+        ]
+      ],
+      "returncodes": [
+        0
+      ],
+      "logs": [
+        "log/run_figures.txt"
+      ],
+      "invocation": "2026-10-24T20:02:01+02:00"
+    }
+  ],
+  "invocations": [
+    {
+      "started": "2026-10-24T20:02:01+02:00",
+      "finished": "2026-10-24T21:42:19+02:00",
+      "total_seconds": 6017.8,
+      "git": {
+        "commit": "8db582d59610782687efdc27e2c03fd8b9201c6c",
+        "branch": "v1-simplify",
+        "dirty": false,
+        "dirty_scope": "prog/"
+      },
+      "confirmatory": false,
+      "max_sentences": null,
+      "selection": "all",
+      "selected": [
+        "pos",
+        "dep",
+        "con",
+        "analyze",
+        "figures"
+      ],
+      "completed": true
+    }
+  ]
+}

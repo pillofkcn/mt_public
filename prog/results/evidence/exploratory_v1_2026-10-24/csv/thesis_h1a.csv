@@ -1,0 +1,8 @@
+task,chain,dataset,status,lower,higher,lower_level,higher_level,m_lower,m_higher,delta,ci_low,ci_high,half_width,class,holds
+pos,pos_ewt,ewt_test,exploratory,nltk_ewt,stanza_ewt,L1,L3,93.8950,97.0073,3.1123,2.7689,3.4785,0.3548,better_by_more_than_delta,yes
+pos,pos_combined,ewt_test,exploratory,stanza_comb,stanza_trf,L3,L4,96.7682,97.8122,1.0441,0.8082,1.2905,0.2411,better_not_shown_by_delta,yes
+dep,dep_ewt,ewt_test,exploratory,nltk_arc,udpipe_ewt,L1,L2,75.9704,80.6089,4.6386,3.9990,5.2447,0.6228,better_by_more_than_delta,yes
+dep,dep_ewt,ewt_test,exploratory,udpipe_ewt,stanza_ewt,L2,L3,80.6089,88.4793,7.8704,7.1367,8.6327,0.7480,better_by_more_than_delta,yes
+dep,dep_combined,ewt_test,exploratory,stanza_comb,stanza_trf,L3,L4,88.4474,92.4564,4.0089,3.4695,4.5986,0.5646,better_by_more_than_delta,yes
+con,con_stanza,wsj_01,exploratory,stanza_con,stanza_con_trf,L3,L4,92.9331,95.5819,2.6488,2.0819,3.1621,0.5401,better_by_more_than_delta,yes
+con,con_benepar,wsj_01,exploratory,stanza_con,benepar,L3,L4,92.9331,94.8943,1.9612,1.4761,2.4291,0.4765,better_by_more_than_delta,yes

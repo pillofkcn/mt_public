@@ -1,0 +1,53 @@
+# DEPREL inventory of data/en_ewt-ud-test.conllu (gold).
+# Tracked so deprel_map.validate_against_gold() can check that every deprel_map
+# target exists in the gold without needing the 18 MB corpus. Format: <count>	<deprel>
+# total tokens: 25094  distinct labels: 49
+3065	punct
+2077	root
+1969	case
+1950	nsubj
+1829	det
+1324	advmod
+1247	amod
+1153	obj
+1009	obl
+976	compound
+861	conj
+816	aux
+760	nmod
+752	mark
+750	cc
+584	cop
+387	nmod:poss
+363	xcomp
+357	advcl
+357	flat
+290	list
+232	parataxis
+223	ccomp
+201	acl:relcl
+174	acl
+164	nummod
+148	appos
+126	discourse
+123	aux:pass
+113	obl:unmarked
+111	nmod:unmarked
+108	nsubj:pass
+89	compound:prt
+71	iobj
+68	expl
+64	fixed
+44	nmod:desc
+36	obl:agent
+25	det:predet
+23	csubj
+21	vocative
+16	nsubj:outer
+15	goeswith
+11	advcl:relcl
+5	cc:preconj
+4	reparandum
+1	csubj:outer
+1	csubj:pass
+1	orphan

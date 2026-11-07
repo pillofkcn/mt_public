@@ -1,0 +1,479 @@
+==========================================================================================
+  STAGE analyze: VERSION 1.0 ANALYSIS - READS THE COUNTS, RUNS NO ANALYZER
+  run dir    : results/run_2026-10-25
+  plan       : plan/v1.yaml  sha256 34f81ee577ed14f1b5a975a05bcbc4dd3fb5f655b4644f14f48e1e964d210268  (analysed under it)
+  measured   : under the plan above (every counts file)
+  bootstrap  : paired_percentile, B = 10000, 95 % CI (numpy's linear quantile), seed 20260101
+  delta      : 1.0 point; sensitivity 0.5, 2.0 and the unit sentence
+==========================================================================================
+  Each set is resampled by its plan unit, with replacement, by one matrix of indices that
+  every configuration on it shares; its stream is SeedSequence(seed, spawn_key=(crc32 of
+  the dataset id, crc32 of the unit)), so one set always gets the same indices and two
+  sets independent ones. Numbers are points, rounded to 2 decimals here and to 4 in
+  csv/thesis_*.csv. Every class and verdict is computed at full precision from the CI and
+  delta of its own row, and the intervals are the whole of the inference.
+
+------------------------------------------------------------------------------------------
+  INPUTS
+------------------------------------------------------------------------------------------
+  file                     task  dataset   status        sentences  units          configurations  run   sha256
+  -----------------------  ----  --------  ------------  ---------  -------------  --------------  ----  ------------
+  counts_pos_ewt_test.csv  pos   ewt_test  exploratory   2077       316 document   9               full  adcb054616ab
+  counts_pos_gentle.csv    pos   gentle    confirmatory  1334       26 document    7               full  f3b596f1db4c
+  counts_dep_ewt_test.csv  dep   ewt_test  exploratory   2077       316 document   7               full  a615036397d0
+  counts_dep_gentle.csv    dep   gentle    confirmatory  1334       26 document    6               full  d5c7d1ba403f
+  counts_con_wsj_01.csv    con   wsj_01    exploratory   1993       100 file       6               full  c27bdbfd0636
+  counts_con_mctb_en.csv   con   mctb_en   confirmatory  5000       5000 sentence  6               full  76ed6dc3baaa
+
+##########################################################################################
+  EXPLORATORY RESULTS: ewt_test, wsj_01
+##########################################################################################
+
+------------------------------------------------------------------------------------------
+  Scores: every configuration, point values [exploratory]
+------------------------------------------------------------------------------------------
+  task  dataset   config          level  roles            metric         value  UAS    CLAS   sentences  units  parsed  EVALB errors
+  ----  --------  --------------  -----  ---------------  -------------  -----  -----  -----  ---------  -----  ------  ------------
+  pos   ewt_test  rdr_ewt         L0     descriptive      upos_accuracy  93.36                2077       316
+  pos   ewt_test  nltk_pre        L1     h2a              upos_accuracy  86.49                2077       316
+  pos   ewt_test  nltk_ewt        L1     h1a+h2a+h2b+d4   upos_accuracy  93.89                2077       316
+  pos   ewt_test  udpipe_ewt      L1     descriptive      upos_accuracy  94.83                2077       316
+  pos   ewt_test  spacy_sm        L2     h2a              upos_accuracy  92.83                2077       316
+  pos   ewt_test  spacy_ewt       L2     h2a+d4           upos_accuracy  94.71                2077       316
+  pos   ewt_test  stanza_ewt      L3     h1a+h2b+h2c      upos_accuracy  97.01                2077       316
+  pos   ewt_test  stanza_comb     L3     h1a+h1b+h2b+h2c  upos_accuracy  96.77                2077       316
+  pos   ewt_test  stanza_trf      L4     h1a+h1b+h2b      upos_accuracy  97.81                2077       316
+  dep   ewt_test  nltk_arc        L1     h1a+h2b          las            75.97  80.19  71.64  2077       316
+  dep   ewt_test  udpipe_ewt      L2     h1a+h2b          las            80.61  83.94  75.44  2077       316
+  dep   ewt_test  spacy_sm        L2     h2a+d3           las            51.24  56.63  56.12  2077       316
+  dep   ewt_test  spacy_ewt       L2     h2a              las            83.46  86.67  79.23  2077       316
+  dep   ewt_test  stanza_ewt      L3     h1a+h2b+h2c      las            88.48  90.89  84.71  2077       316
+  dep   ewt_test  stanza_comb     L3     h1a+h1b+h2b+h2c  las            88.45  90.77  84.68  2077       316
+  dep   ewt_test  stanza_trf      L4     h1a+h1b+h2b      las            92.46  94.42  89.70  2077       316
+  con   wsj_01    pcfg_words      L1     d2               bracket_f1     5.18                 250        66     12      0
+  con   wsj_01    pcfg_tags       L1     d2               bracket_f1     64.82                250        66     212     0
+  con   wsj_01    stanza_con      L3     h1a+h2b          bracket_f1     92.93                1993       100    1993    31
+  con   wsj_01    stanza_con_trf  L4     h1a+h2b          bracket_f1     95.58                1993       100    1993    31
+  con   wsj_01    benepar         L4     h1a+h2b          bracket_f1     94.89                1993       100    1993    24
+  con   wsj_01    supar_con       L3     descriptive      bracket_f1     94.22                1993       100    1993    0
+
+------------------------------------------------------------------------------------------
+  H1a - each step of an H1a chain: Delta = M(higher) - M(lower); holds when ci_low > 0 [exploratory]
+------------------------------------------------------------------------------------------
+  task  chain         dataset   step                                    M lower  M higher  Delta  95 % CI       half-width  class                      holds
+  ----  ------------  --------  --------------------------------------  -------  --------  -----  ------------  ----------  -------------------------  -----
+  pos   pos_ewt       ewt_test  nltk_ewt (L1) -> stanza_ewt (L3)        93.89    97.01     3.11   [2.77, 3.48]  0.35        better_by_more_than_delta  yes
+  pos   pos_combined  ewt_test  stanza_comb (L3) -> stanza_trf (L4)     96.77    97.81     1.04   [0.81, 1.29]  0.24        better_not_shown_by_delta  yes
+  dep   dep_ewt       ewt_test  nltk_arc (L1) -> udpipe_ewt (L2)        75.97    80.61     4.64   [4.00, 5.24]  0.62        better_by_more_than_delta  yes
+  dep   dep_ewt       ewt_test  udpipe_ewt (L2) -> stanza_ewt (L3)      80.61    88.48     7.87   [7.14, 8.63]  0.75        better_by_more_than_delta  yes
+  dep   dep_combined  ewt_test  stanza_comb (L3) -> stanza_trf (L4)     88.45    92.46     4.01   [3.47, 4.60]  0.56        better_by_more_than_delta  yes
+  con   con_stanza    wsj_01    stanza_con (L3) -> stanza_con_trf (L4)  92.93    95.58     2.65   [2.08, 3.16]  0.54        better_by_more_than_delta  yes
+  con   con_benepar   wsj_01    stanza_con (L3) -> benepar (L4)         92.93    94.89     1.96   [1.48, 2.43]  0.48        better_by_more_than_delta  yes
+
+  verdict H1A [exploratory]: holds - 7 of 7 parts hold
+
+------------------------------------------------------------------------------------------
+  H1b - the step to the transformer: Delta_LAS - Delta_UPOS from the same replicate; holds when ci_low > 0 [exploratory]
+------------------------------------------------------------------------------------------
+  dataset   verdict set  step                       Delta las [95 % CI]  Delta upos_accuracy [95 % CI]  diff  95 % CI       half-width  class                      holds
+  --------  -----------  -------------------------  -------------------  -----------------------------  ----  ------------  ----------  -------------------------  -----
+  ewt_test  no           stanza_comb -> stanza_trf  4.01 [3.47, 4.60]    1.04 [0.81, 1.29]              2.96  [2.46, 3.51]  0.53        better_by_more_than_delta  yes
+
+  verdict H1B [exploratory]: holds - 1 of 1 part hold; not the verdict: the plan gives it to gentle
+
+------------------------------------------------------------------------------------------
+  H2a - training data: |Delta_source| - Delta_step,max from the same replicate; holds when ci_low > 0 [exploratory]
+------------------------------------------------------------------------------------------
+  task  pair       dataset   baseline -> treatment  Delta_source [95 % CI]  Delta_step,max (step)            |D_source| - step  95 % CI         half-width  class                      holds
+  ----  ---------  --------  ---------------------  ----------------------  -------------------------------  -----------------  --------------  ----------  -------------------------  -----
+  pos   pos_nltk   ewt_test  nltk_pre -> nltk_ewt   7.40 [6.78, 8.04]       3.11 (nltk_ewt -> stanza_ewt)    4.29               [3.49, 5.07]    0.79        better_by_more_than_delta  yes
+  pos   pos_spacy  ewt_test  spacy_sm -> spacy_ewt  1.88 [1.37, 2.40]       3.11 (nltk_ewt -> stanza_ewt)    -1.23              [-1.88, -0.60]  0.64        worse_not_shown_by_delta   no
+  dep   dep_spacy  ewt_test  spacy_sm -> spacy_ewt  32.22 [30.98, 33.44]    7.87 (udpipe_ewt -> stanza_ewt)  24.35              [22.79, 25.77]  1.49        better_by_more_than_delta  yes
+
+  verdict H2A [exploratory]: does not hold - 2 of 3 parts hold
+
+------------------------------------------------------------------------------------------
+  H2c - related data: Delta = M(treatment) - M(baseline); equivalence holds when -delta < ci_low and ci_high < +delta, superiority when ci_low > +delta [exploratory]
+------------------------------------------------------------------------------------------
+  task  dataset   decision     baseline -> treatment      Delta  95 % CI         half-width  class                   holds
+  ----  --------  -----------  -------------------------  -----  --------------  ----------  ----------------------  -----
+  pos   ewt_test  equivalence  stanza_ewt -> stanza_comb  -0.24  [-0.41, -0.07]  0.17        practically_equivalent  yes
+  dep   ewt_test  equivalence  stanza_ewt -> stanza_comb  -0.03  [-0.59, 0.58]   0.59        practically_equivalent  yes
+
+  verdict H2C [exploratory]: holds - 2 of 2 parts hold
+
+------------------------------------------------------------------------------------------
+  H1 and H2 - a hypothesis holds only if every part of it holds (H1: H1a, H1b; H2: H2a, H2b, H2c) [exploratory]
+------------------------------------------------------------------------------------------
+  verdict H1 [exploratory]: holds - 8 of 8 parts hold; its H1b part is not the verdict of H1b: the plan gives that to gentle
+  verdict H2 [exploratory]: does not hold - 4 of 5 parts hold; H2b has no exploratory part and does not enter it: H2 on the exploratory sets is H2a + H2c
+
+  delta = 1.0 point; class: where the 95 % CI lies relative to 0 and +-delta.
+
+------------------------------------------------------------------------------------------
+  D2 - PCFG coverage by failure reason, and F1 on the sentences the PCFG parsed [exploratory]
+------------------------------------------------------------------------------------------
+  dataset  config      sampled  parsed  unknown_word  no_derivation  over_length  error  coverage
+  -------  ----------  -------  ------  ------------  -------------  -----------  -----  --------
+  wsj_01   pcfg_words  250      12      214           7              17           0      4.80
+  wsj_01   pcfg_tags   250      212     0             21             17           0      84.80
+
+  dataset  PCFG        config          sentences  F1
+  -------  ----------  --------------  ---------  -----
+  wsj_01   pcfg_words  pcfg_words      12         68.33
+  wsj_01   pcfg_words  stanza_con      12         96.61
+  wsj_01   pcfg_words  stanza_con_trf  12         97.44
+  wsj_01   pcfg_words  benepar         12         97.99
+  wsj_01   pcfg_words  supar_con       12         97.45
+  wsj_01   pcfg_tags   pcfg_tags       212        73.09
+  wsj_01   pcfg_tags   stanza_con      212        94.80
+  wsj_01   pcfg_tags   stanza_con_trf  212        96.50
+  wsj_01   pcfg_tags   benepar         212        95.95
+  wsj_01   pcfg_tags   supar_con       212        95.72
+
+  Descriptive: no CI, no class. Coverage = parsed / sampled, in points.
+
+------------------------------------------------------------------------------------------
+  D3 - annotation scheme: other - spacy_sm, descriptive [exploratory]
+------------------------------------------------------------------------------------------
+  dataset   metric  other        M spacy_sm  M other  Delta  95 % CI         half-width
+  --------  ------  -----------  ----------  -------  -----  --------------  ----------
+  ewt_test  las     nltk_arc     51.24       75.97    24.73  [23.34, 26.10]  1.38
+  ewt_test  las     udpipe_ewt   51.24       80.61    29.37  [27.93, 30.75]  1.41
+  ewt_test  las     spacy_ewt    51.24       83.46    32.22  [30.98, 33.44]  1.23
+  ewt_test  las     stanza_ewt   51.24       88.48    37.24  [35.90, 38.58]  1.34
+  ewt_test  las     stanza_comb  51.24       88.45    37.21  [35.67, 38.81]  1.57
+  ewt_test  las     stanza_trf   51.24       92.46    41.22  [39.87, 42.61]  1.37
+  ewt_test  clas    nltk_arc     56.12       71.64    15.52  [13.90, 17.11]  1.61
+  ewt_test  clas    udpipe_ewt   56.12       75.44    19.32  [17.60, 20.97]  1.69
+  ewt_test  clas    spacy_ewt    56.12       79.23    23.11  [21.69, 24.46]  1.39
+  ewt_test  clas    stanza_ewt   56.12       84.71    28.59  [27.18, 29.98]  1.40
+  ewt_test  clas    stanza_comb  56.12       84.68    28.56  [26.93, 30.27]  1.67
+  ewt_test  clas    stanza_trf   56.12       89.70    33.58  [32.18, 35.04]  1.43
+
+------------------------------------------------------------------------------------------
+  D4 - nltk_ewt -> spacy_ewt, descriptive [exploratory]
+------------------------------------------------------------------------------------------
+  dataset   M baseline  M treatment  Delta  95 % CI       half-width
+  --------  ----------  -----------  -----  ------------  ----------
+  ewt_test  93.89       94.71        0.81   [0.53, 1.10]  0.28
+
+##########################################################################################
+  CONFIRMATORY RESULTS: gentle, mctb_en
+##########################################################################################
+
+------------------------------------------------------------------------------------------
+  Scores: every configuration, point values [confirmatory]
+------------------------------------------------------------------------------------------
+  task  dataset  config          level  roles            metric         value  UAS    CLAS   sentences  units  parsed  EVALB errors
+  ----  -------  --------------  -----  ---------------  -------------  -----  -----  -----  ---------  -----  ------  ------------
+  pos   gentle   rdr_ewt         L0     descriptive      upos_accuracy  85.97                1334       26
+  pos   gentle   nltk_ewt        L1     h1a+h2a+h2b+d4   upos_accuracy  86.57                1334       26
+  pos   gentle   udpipe_ewt      L1     descriptive      upos_accuracy  88.13                1334       26
+  pos   gentle   spacy_ewt       L2     h2a+d4           upos_accuracy  87.50                1334       26
+  pos   gentle   stanza_ewt      L3     h1a+h2b+h2c      upos_accuracy  91.12                1334       26
+  pos   gentle   stanza_comb     L3     h1a+h1b+h2b+h2c  upos_accuracy  92.52                1334       26
+  pos   gentle   stanza_trf      L4     h1a+h1b+h2b      upos_accuracy  94.12                1334       26
+  dep   gentle   nltk_arc        L1     h1a+h2b          las            62.95  68.91  55.60  1334       26
+  dep   gentle   udpipe_ewt      L2     h1a+h2b          las            68.17  73.75  59.80  1334       26
+  dep   gentle   spacy_ewt       L2     h2a              las            70.81  76.88  62.87  1334       26
+  dep   gentle   stanza_ewt      L3     h1a+h2b+h2c      las            78.02  83.34  71.76  1334       26
+  dep   gentle   stanza_comb     L3     h1a+h1b+h2b+h2c  las            79.85  84.55  74.06  1334       26
+  dep   gentle   stanza_trf      L4     h1a+h1b+h2b      las            86.31  90.20  81.90  1334       26
+  con   mctb_en  pcfg_words      L1     d2               bracket_f1     4.60                 250        250    19      0
+  con   mctb_en  pcfg_tags       L1     d2               bracket_f1     46.82                250        250    177     6
+  con   mctb_en  stanza_con      L3     h1a+h2b          bracket_f1     82.42                5000       5000   5000    773
+  con   mctb_en  stanza_con_trf  L4     h1a+h2b          bracket_f1     86.32                5000       5000   5000    773
+  con   mctb_en  benepar         L4     h1a+h2b          bracket_f1     86.52                5000       5000   5000    592
+  con   mctb_en  supar_con       L3     descriptive      bracket_f1     81.85                5000       5000   5000    48
+
+------------------------------------------------------------------------------------------
+  H1a - each step of an H1a chain: Delta = M(higher) - M(lower); holds when ci_low > 0 [confirmatory]
+------------------------------------------------------------------------------------------
+  task  chain         dataset  step                                    M lower  M higher  Delta  95 % CI        half-width  class                      holds
+  ----  ------------  -------  --------------------------------------  -------  --------  -----  -------------  ----------  -------------------------  -----
+  pos   pos_ewt       gentle   nltk_ewt (L1) -> stanza_ewt (L3)        86.57    91.12     4.55   [3.36, 5.80]   1.22        better_by_more_than_delta  yes
+  pos   pos_combined  gentle   stanza_comb (L3) -> stanza_trf (L4)     92.52    94.12     1.60   [0.82, 2.44]   0.81        better_not_shown_by_delta  yes
+  dep   dep_ewt       gentle   nltk_arc (L1) -> udpipe_ewt (L2)        62.95    68.17     5.22   [3.86, 6.39]   1.26        better_by_more_than_delta  yes
+  dep   dep_ewt       gentle   udpipe_ewt (L2) -> stanza_ewt (L3)      68.17    78.02     9.85   [7.84, 12.34]  2.25        better_by_more_than_delta  yes
+  dep   dep_combined  gentle   stanza_comb (L3) -> stanza_trf (L4)     79.85    86.31     6.46   [5.29, 7.74]   1.23        better_by_more_than_delta  yes
+  con   con_stanza    mctb_en  stanza_con (L3) -> stanza_con_trf (L4)  82.42    86.32     3.89   [3.52, 4.28]   0.38        better_by_more_than_delta  yes
+  con   con_benepar   mctb_en  stanza_con (L3) -> benepar (L4)         82.42    86.52     4.09   [3.70, 4.48]   0.39        better_by_more_than_delta  yes
+
+  verdict H1A [confirmatory]: holds - 7 of 7 parts hold
+
+------------------------------------------------------------------------------------------
+  H1b - the step to the transformer: Delta_LAS - Delta_UPOS from the same replicate; holds when ci_low > 0 [confirmatory]
+------------------------------------------------------------------------------------------
+  dataset  verdict set  step                       Delta las [95 % CI]  Delta upos_accuracy [95 % CI]  diff  95 % CI       half-width  class                      holds
+  -------  -----------  -------------------------  -------------------  -----------------------------  ----  ------------  ----------  -------------------------  -----
+  gentle   yes          stanza_comb -> stanza_trf  6.46 [5.29, 7.74]    1.60 [0.82, 2.44]              4.86  [3.89, 5.89]  1.00        better_by_more_than_delta  yes
+
+  verdict H1B [confirmatory]: holds - 1 of 1 part hold
+
+------------------------------------------------------------------------------------------
+  H2b - test data: (M_in - M_out) - Delta_step,max, the step from the in-domain replicate; holds when ci_low > 0 [confirmatory]
+------------------------------------------------------------------------------------------
+  task  config          source -> target    M in   M out  drop [95 % CI]       Delta_step,max (step)                drop - step  95 % CI        half-width  class                      holds
+  ----  --------------  ------------------  -----  -----  -------------------  -----------------------------------  -----------  -------------  ----------  -------------------------  -----
+  pos   nltk_ewt        ewt_test -> gentle  93.89  86.57  7.33 [3.76, 11.50]   3.11 (nltk_ewt -> stanza_ewt)        4.22         [0.59, 8.44]   3.93        better_not_shown_by_delta  yes
+  pos   stanza_ewt      ewt_test -> gentle  97.01  91.12  5.89 [3.17, 9.03]    3.11 (nltk_ewt -> stanza_ewt)        2.78         [0.05, 5.98]   2.96        better_not_shown_by_delta  yes
+  pos   stanza_comb     ewt_test -> gentle  96.77  92.52  4.25 [2.02, 6.83]    3.11 (nltk_ewt -> stanza_ewt)        1.13         [-1.12, 3.75]  2.44        inconclusive               no
+  pos   stanza_trf      ewt_test -> gentle  97.81  94.12  3.69 [1.84, 5.73]    3.11 (nltk_ewt -> stanza_ewt)        0.58         [-1.30, 2.69]  1.99        inconclusive               no
+  dep   nltk_arc        ewt_test -> gentle  75.97  62.95  13.02 [9.05, 16.87]  7.87 (udpipe_ewt -> stanza_ewt)      5.15         [1.06, 9.17]   4.06        better_by_more_than_delta  yes
+  dep   udpipe_ewt      ewt_test -> gentle  80.61  68.17  12.44 [8.89, 16.09]  7.87 (udpipe_ewt -> stanza_ewt)      4.57         [0.79, 8.41]   3.81        better_not_shown_by_delta  yes
+  dep   stanza_ewt      ewt_test -> gentle  88.48  78.02  10.46 [7.50, 13.71]  7.87 (udpipe_ewt -> stanza_ewt)      2.59         [-0.40, 5.88]  3.14        inconclusive               no
+  dep   stanza_comb     ewt_test -> gentle  88.45  79.85  8.60 [5.86, 11.62]   7.87 (udpipe_ewt -> stanza_ewt)      0.73         [-2.04, 3.79]  2.91        inconclusive               no
+  dep   stanza_trf      ewt_test -> gentle  92.46  86.31  6.15 [4.05, 8.42]    7.87 (udpipe_ewt -> stanza_ewt)      -1.72        [-3.94, 0.62]  2.28        inconclusive               no
+  con   stanza_con      wsj_01 -> mctb_en   92.93  82.42  10.51 [9.71, 11.33]  2.65 (stanza_con -> stanza_con_trf)  7.86         [6.68, 9.13]   1.22        better_by_more_than_delta  yes
+  con   stanza_con_trf  wsj_01 -> mctb_en   95.58  86.32  9.26 [8.66, 9.83]    2.65 (stanza_con -> stanza_con_trf)  6.61         [5.86, 7.40]   0.77        better_by_more_than_delta  yes
+  con   benepar         wsj_01 -> mctb_en   94.89  86.52  8.38 [7.79, 8.96]    2.65 (stanza_con -> stanza_con_trf)  5.73         [4.89, 6.62]   0.87        better_by_more_than_delta  yes
+
+  verdict H2B [confirmatory]: does not hold - 7 of 12 parts hold
+
+------------------------------------------------------------------------------------------
+  H2c - related data: Delta = M(treatment) - M(baseline); equivalence holds when -delta < ci_low and ci_high < +delta, superiority when ci_low > +delta [confirmatory]
+------------------------------------------------------------------------------------------
+  task  dataset  decision     baseline -> treatment      Delta  95 % CI       half-width  class                      holds
+  ----  -------  -----------  -------------------------  -----  ------------  ----------  -------------------------  -----
+  pos   gentle   superiority  stanza_ewt -> stanza_comb  1.40   [0.10, 3.23]  1.57        better_not_shown_by_delta  no
+  dep   gentle   superiority  stanza_ewt -> stanza_comb  1.83   [1.01, 2.62]  0.81        better_by_more_than_delta  yes
+
+  verdict H2C [confirmatory]: does not hold - 1 of 2 parts hold
+
+------------------------------------------------------------------------------------------
+  H1 and H2 - a hypothesis holds only if every part of it holds (H1: H1a, H1b; H2: H2a, H2b, H2c) [confirmatory]
+------------------------------------------------------------------------------------------
+  verdict H1 [confirmatory]: holds - 8 of 8 parts hold
+  verdict H2 [confirmatory]: does not hold - 8 of 14 parts hold; H2a has no confirmatory part and does not enter it: H2 on the confirmatory sets is H2b + H2c
+
+  delta = 1.0 point; class: where the 95 % CI lies relative to 0 and +-delta.
+
+------------------------------------------------------------------------------------------
+  D2 - PCFG coverage by failure reason, and F1 on the sentences the PCFG parsed [confirmatory]
+------------------------------------------------------------------------------------------
+  dataset  config      sampled  parsed  unknown_word  no_derivation  over_length  error  coverage
+  -------  ----------  -------  ------  ------------  -------------  -----------  -----  --------
+  mctb_en  pcfg_words  250      19      213           5              13           0      7.60
+  mctb_en  pcfg_tags   250      177     0             60             13           0      70.80
+
+  dataset  PCFG        config          sentences  F1
+  -------  ----------  --------------  ---------  -----
+  mctb_en  pcfg_words  pcfg_words      19         64.96
+  mctb_en  pcfg_words  stanza_con      19         80.00
+  mctb_en  pcfg_words  stanza_con_trf  19         81.18
+  mctb_en  pcfg_words  benepar         19         84.25
+  mctb_en  pcfg_words  supar_con       19         82.35
+  mctb_en  pcfg_tags   pcfg_tags       177        60.59
+  mctb_en  pcfg_tags   stanza_con      177        83.31
+  mctb_en  pcfg_tags   stanza_con_trf  177        86.36
+  mctb_en  pcfg_tags   benepar         177        86.25
+  mctb_en  pcfg_tags   supar_con       177        81.67
+
+  Descriptive: no CI, no class. Coverage = parsed / sampled, in points.
+
+------------------------------------------------------------------------------------------
+  D4 - nltk_ewt -> spacy_ewt, descriptive [confirmatory]
+------------------------------------------------------------------------------------------
+  dataset  M baseline  M treatment  Delta  95 % CI       half-width
+  -------  ----------  -----------  -----  ------------  ----------
+  gentle   86.57       87.50        0.94   [0.11, 1.89]  0.89
+
+------------------------------------------------------------------------------------------
+  Descriptive drops: the members whose only role is descriptive [confirmatory]
+------------------------------------------------------------------------------------------
+  task  config      source -> target    M in   M out  drop   95 % CI         half-width
+  ----  ----------  ------------------  -----  -----  -----  --------------  ----------
+  pos   rdr_ewt     ewt_test -> gentle  93.36  85.97  7.39   [4.15, 11.14]   3.50
+  pos   udpipe_ewt  ewt_test -> gentle  94.83  88.13  6.70   [3.80, 10.08]   3.14
+  con   supar_con   wsj_01 -> mctb_en   94.22  81.85  12.36  [11.69, 13.08]  0.69
+
+------------------------------------------------------------------------------------------
+  SENSITIVITY - every hypothesis row at each delta, and with the sentence as unit
+------------------------------------------------------------------------------------------
+  hypothesis  row                                                 status        unit            delta  estimate  95 % CI         class                      holds
+  ----------  --------------------------------------------------  ------------  --------------  -----  --------  --------------  -------------------------  -----
+  h1a         pos/pos_ewt/ewt_test/nltk_ewt->stanza_ewt           exploratory   document        0.5    3.11      [2.77, 3.48]    better_by_more_than_delta  yes
+  h1a         pos/pos_ewt/ewt_test/nltk_ewt->stanza_ewt           exploratory   document        1.0    3.11      [2.77, 3.48]    better_by_more_than_delta  yes
+  h1a         pos/pos_ewt/ewt_test/nltk_ewt->stanza_ewt           exploratory   document        2.0    3.11      [2.77, 3.48]    better_by_more_than_delta  yes
+  h1a         pos/pos_ewt/ewt_test/nltk_ewt->stanza_ewt           exploratory   sentence        1.0    3.11      [2.81, 3.43]    better_by_more_than_delta  yes
+  h1a         pos/pos_combined/ewt_test/stanza_comb->stanza_trf   exploratory   document        0.5    1.04      [0.81, 1.29]    better_by_more_than_delta  yes
+  h1a         pos/pos_combined/ewt_test/stanza_comb->stanza_trf   exploratory   document        1.0    1.04      [0.81, 1.29]    better_not_shown_by_delta  yes
+  h1a         pos/pos_combined/ewt_test/stanza_comb->stanza_trf   exploratory   document        2.0    1.04      [0.81, 1.29]    practically_equivalent     yes
+  h1a         pos/pos_combined/ewt_test/stanza_comb->stanza_trf   exploratory   sentence        1.0    1.04      [0.84, 1.26]    better_not_shown_by_delta  yes
+  h1a         pos/pos_ewt/gentle/nltk_ewt->stanza_ewt             confirmatory  document        0.5    4.55      [3.36, 5.80]    better_by_more_than_delta  yes
+  h1a         pos/pos_ewt/gentle/nltk_ewt->stanza_ewt             confirmatory  document        1.0    4.55      [3.36, 5.80]    better_by_more_than_delta  yes
+  h1a         pos/pos_ewt/gentle/nltk_ewt->stanza_ewt             confirmatory  document        2.0    4.55      [3.36, 5.80]    better_by_more_than_delta  yes
+  h1a         pos/pos_ewt/gentle/nltk_ewt->stanza_ewt             confirmatory  sentence        1.0    4.55      [4.03, 5.08]    better_by_more_than_delta  yes
+  h1a         pos/pos_combined/gentle/stanza_comb->stanza_trf     confirmatory  document        0.5    1.60      [0.82, 2.44]    better_by_more_than_delta  yes
+  h1a         pos/pos_combined/gentle/stanza_comb->stanza_trf     confirmatory  document        1.0    1.60      [0.82, 2.44]    better_not_shown_by_delta  yes
+  h1a         pos/pos_combined/gentle/stanza_comb->stanza_trf     confirmatory  document        2.0    1.60      [0.82, 2.44]    better_not_shown_by_delta  yes
+  h1a         pos/pos_combined/gentle/stanza_comb->stanza_trf     confirmatory  sentence        1.0    1.60      [1.22, 1.98]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/ewt_test/nltk_arc->udpipe_ewt           exploratory   document        0.5    4.64      [4.00, 5.24]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/ewt_test/nltk_arc->udpipe_ewt           exploratory   document        1.0    4.64      [4.00, 5.24]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/ewt_test/nltk_arc->udpipe_ewt           exploratory   document        2.0    4.64      [4.00, 5.24]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/ewt_test/nltk_arc->udpipe_ewt           exploratory   sentence        1.0    4.64      [3.96, 5.33]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/ewt_test/udpipe_ewt->stanza_ewt         exploratory   document        0.5    7.87      [7.14, 8.63]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/ewt_test/udpipe_ewt->stanza_ewt         exploratory   document        1.0    7.87      [7.14, 8.63]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/ewt_test/udpipe_ewt->stanza_ewt         exploratory   document        2.0    7.87      [7.14, 8.63]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/ewt_test/udpipe_ewt->stanza_ewt         exploratory   sentence        1.0    7.87      [7.14, 8.61]    better_by_more_than_delta  yes
+  h1a         dep/dep_combined/ewt_test/stanza_comb->stanza_trf   exploratory   document        0.5    4.01      [3.47, 4.60]    better_by_more_than_delta  yes
+  h1a         dep/dep_combined/ewt_test/stanza_comb->stanza_trf   exploratory   document        1.0    4.01      [3.47, 4.60]    better_by_more_than_delta  yes
+  h1a         dep/dep_combined/ewt_test/stanza_comb->stanza_trf   exploratory   document        2.0    4.01      [3.47, 4.60]    better_by_more_than_delta  yes
+  h1a         dep/dep_combined/ewt_test/stanza_comb->stanza_trf   exploratory   sentence        1.0    4.01      [3.51, 4.51]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/gentle/nltk_arc->udpipe_ewt             confirmatory  document        0.5    5.22      [3.86, 6.39]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/gentle/nltk_arc->udpipe_ewt             confirmatory  document        1.0    5.22      [3.86, 6.39]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/gentle/nltk_arc->udpipe_ewt             confirmatory  document        2.0    5.22      [3.86, 6.39]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/gentle/nltk_arc->udpipe_ewt             confirmatory  sentence        1.0    5.22      [4.40, 6.05]    better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/gentle/udpipe_ewt->stanza_ewt           confirmatory  document        0.5    9.85      [7.84, 12.34]   better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/gentle/udpipe_ewt->stanza_ewt           confirmatory  document        1.0    9.85      [7.84, 12.34]   better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/gentle/udpipe_ewt->stanza_ewt           confirmatory  document        2.0    9.85      [7.84, 12.34]   better_by_more_than_delta  yes
+  h1a         dep/dep_ewt/gentle/udpipe_ewt->stanza_ewt           confirmatory  sentence        1.0    9.85      [8.86, 10.84]   better_by_more_than_delta  yes
+  h1a         dep/dep_combined/gentle/stanza_comb->stanza_trf     confirmatory  document        0.5    6.46      [5.29, 7.74]    better_by_more_than_delta  yes
+  h1a         dep/dep_combined/gentle/stanza_comb->stanza_trf     confirmatory  document        1.0    6.46      [5.29, 7.74]    better_by_more_than_delta  yes
+  h1a         dep/dep_combined/gentle/stanza_comb->stanza_trf     confirmatory  document        2.0    6.46      [5.29, 7.74]    better_by_more_than_delta  yes
+  h1a         dep/dep_combined/gentle/stanza_comb->stanza_trf     confirmatory  sentence        1.0    6.46      [5.74, 7.19]    better_by_more_than_delta  yes
+  h1a         con/con_stanza/wsj_01/stanza_con->stanza_con_trf    exploratory   file            0.5    2.65      [2.08, 3.16]    better_by_more_than_delta  yes
+  h1a         con/con_stanza/wsj_01/stanza_con->stanza_con_trf    exploratory   file            1.0    2.65      [2.08, 3.16]    better_by_more_than_delta  yes
+  h1a         con/con_stanza/wsj_01/stanza_con->stanza_con_trf    exploratory   file            2.0    2.65      [2.08, 3.16]    better_by_more_than_delta  yes
+  h1a         con/con_stanza/wsj_01/stanza_con->stanza_con_trf    exploratory   sentence        1.0    2.65      [2.29, 3.01]    better_by_more_than_delta  yes
+  h1a         con/con_benepar/wsj_01/stanza_con->benepar          exploratory   file            0.5    1.96      [1.48, 2.43]    better_by_more_than_delta  yes
+  h1a         con/con_benepar/wsj_01/stanza_con->benepar          exploratory   file            1.0    1.96      [1.48, 2.43]    better_by_more_than_delta  yes
+  h1a         con/con_benepar/wsj_01/stanza_con->benepar          exploratory   file            2.0    1.96      [1.48, 2.43]    better_not_shown_by_delta  yes
+  h1a         con/con_benepar/wsj_01/stanza_con->benepar          exploratory   sentence        1.0    1.96      [1.60, 2.35]    better_by_more_than_delta  yes
+  h1a         con/con_stanza/mctb_en/stanza_con->stanza_con_trf   confirmatory  sentence        0.5    3.89      [3.52, 4.28]    better_by_more_than_delta  yes
+  h1a         con/con_stanza/mctb_en/stanza_con->stanza_con_trf   confirmatory  sentence        1.0    3.89      [3.52, 4.28]    better_by_more_than_delta  yes
+  h1a         con/con_stanza/mctb_en/stanza_con->stanza_con_trf   confirmatory  sentence        2.0    3.89      [3.52, 4.28]    better_by_more_than_delta  yes
+  h1a         con/con_benepar/mctb_en/stanza_con->benepar         confirmatory  sentence        0.5    4.09      [3.70, 4.48]    better_by_more_than_delta  yes
+  h1a         con/con_benepar/mctb_en/stanza_con->benepar         confirmatory  sentence        1.0    4.09      [3.70, 4.48]    better_by_more_than_delta  yes
+  h1a         con/con_benepar/mctb_en/stanza_con->benepar         confirmatory  sentence        2.0    4.09      [3.70, 4.48]    better_by_more_than_delta  yes
+  h1b         ewt_test/stanza_comb->stanza_trf/las-upos_accuracy  exploratory   document        0.5    2.96      [2.46, 3.51]    better_by_more_than_delta  yes
+  h1b         ewt_test/stanza_comb->stanza_trf/las-upos_accuracy  exploratory   document        1.0    2.96      [2.46, 3.51]    better_by_more_than_delta  yes
+  h1b         ewt_test/stanza_comb->stanza_trf/las-upos_accuracy  exploratory   document        2.0    2.96      [2.46, 3.51]    better_by_more_than_delta  yes
+  h1b         ewt_test/stanza_comb->stanza_trf/las-upos_accuracy  exploratory   sentence        1.0    2.96      [2.48, 3.45]    better_by_more_than_delta  yes
+  h1b         gentle/stanza_comb->stanza_trf/las-upos_accuracy    confirmatory  document        0.5    4.86      [3.89, 5.89]    better_by_more_than_delta  yes
+  h1b         gentle/stanza_comb->stanza_trf/las-upos_accuracy    confirmatory  document        1.0    4.86      [3.89, 5.89]    better_by_more_than_delta  yes
+  h1b         gentle/stanza_comb->stanza_trf/las-upos_accuracy    confirmatory  document        2.0    4.86      [3.89, 5.89]    better_by_more_than_delta  yes
+  h1b         gentle/stanza_comb->stanza_trf/las-upos_accuracy    confirmatory  sentence        1.0    4.86      [4.12, 5.60]    better_by_more_than_delta  yes
+  h2a         pos/pos_nltk/ewt_test/nltk_pre->nltk_ewt            exploratory   document        0.5    4.29      [3.49, 5.07]    better_by_more_than_delta  yes
+  h2a         pos/pos_nltk/ewt_test/nltk_pre->nltk_ewt            exploratory   document        1.0    4.29      [3.49, 5.07]    better_by_more_than_delta  yes
+  h2a         pos/pos_nltk/ewt_test/nltk_pre->nltk_ewt            exploratory   document        2.0    4.29      [3.49, 5.07]    better_by_more_than_delta  yes
+  h2a         pos/pos_nltk/ewt_test/nltk_pre->nltk_ewt            exploratory   sentence        1.0    4.29      [3.66, 4.93]    better_by_more_than_delta  yes
+  h2a         pos/pos_spacy/ewt_test/spacy_sm->spacy_ewt          exploratory   document        0.5    -1.23     [-1.88, -0.60]  worse_by_more_than_delta   no
+  h2a         pos/pos_spacy/ewt_test/spacy_sm->spacy_ewt          exploratory   document        1.0    -1.23     [-1.88, -0.60]  worse_not_shown_by_delta   no
+  h2a         pos/pos_spacy/ewt_test/spacy_sm->spacy_ewt          exploratory   document        2.0    -1.23     [-1.88, -0.60]  practically_equivalent     no
+  h2a         pos/pos_spacy/ewt_test/spacy_sm->spacy_ewt          exploratory   sentence        1.0    -1.23     [-1.73, -0.74]  worse_not_shown_by_delta   no
+  h2a         dep/dep_spacy/ewt_test/spacy_sm->spacy_ewt          exploratory   document        0.5    24.35     [22.79, 25.77]  better_by_more_than_delta  yes
+  h2a         dep/dep_spacy/ewt_test/spacy_sm->spacy_ewt          exploratory   document        1.0    24.35     [22.79, 25.77]  better_by_more_than_delta  yes
+  h2a         dep/dep_spacy/ewt_test/spacy_sm->spacy_ewt          exploratory   document        2.0    24.35     [22.79, 25.77]  better_by_more_than_delta  yes
+  h2a         dep/dep_spacy/ewt_test/spacy_sm->spacy_ewt          exploratory   sentence        1.0    24.35     [23.06, 25.62]  better_by_more_than_delta  yes
+  h2b         pos/nltk_ewt/ewt_test->gentle                       confirmatory  document        0.5    4.22      [0.59, 8.44]    better_by_more_than_delta  yes
+  h2b         pos/nltk_ewt/ewt_test->gentle                       confirmatory  document        1.0    4.22      [0.59, 8.44]    better_not_shown_by_delta  yes
+  h2b         pos/nltk_ewt/ewt_test->gentle                       confirmatory  document        2.0    4.22      [0.59, 8.44]    better_not_shown_by_delta  yes
+  h2b         pos/nltk_ewt/ewt_test->gentle                       confirmatory  sentence        1.0    4.22      [3.20, 5.27]    better_by_more_than_delta  yes
+  h2b         pos/stanza_ewt/ewt_test->gentle                     confirmatory  document        0.5    2.78      [0.05, 5.98]    better_not_shown_by_delta  yes
+  h2b         pos/stanza_ewt/ewt_test->gentle                     confirmatory  document        1.0    2.78      [0.05, 5.98]    better_not_shown_by_delta  yes
+  h2b         pos/stanza_ewt/ewt_test->gentle                     confirmatory  document        2.0    2.78      [0.05, 5.98]    better_not_shown_by_delta  yes
+  h2b         pos/stanza_ewt/ewt_test->gentle                     confirmatory  sentence        1.0    2.78      [2.03, 3.55]    better_by_more_than_delta  yes
+  h2b         pos/stanza_comb/ewt_test->gentle                    confirmatory  document        0.5    1.13      [-1.12, 3.75]   inconclusive               no
+  h2b         pos/stanza_comb/ewt_test->gentle                    confirmatory  document        1.0    1.13      [-1.12, 3.75]   inconclusive               no
+  h2b         pos/stanza_comb/ewt_test->gentle                    confirmatory  document        2.0    1.13      [-1.12, 3.75]   inconclusive               no
+  h2b         pos/stanza_comb/ewt_test->gentle                    confirmatory  sentence        1.0    1.13      [0.36, 1.93]    better_not_shown_by_delta  yes
+  h2b         pos/stanza_trf/ewt_test->gentle                     confirmatory  document        0.5    0.58      [-1.30, 2.69]   inconclusive               no
+  h2b         pos/stanza_trf/ewt_test->gentle                     confirmatory  document        1.0    0.58      [-1.30, 2.69]   inconclusive               no
+  h2b         pos/stanza_trf/ewt_test->gentle                     confirmatory  document        2.0    0.58      [-1.30, 2.69]   inconclusive               no
+  h2b         pos/stanza_trf/ewt_test->gentle                     confirmatory  sentence        1.0    0.58      [-0.08, 1.28]   inconclusive               no
+  h2b         dep/nltk_arc/ewt_test->gentle                       confirmatory  document        0.5    5.15      [1.06, 9.17]    better_by_more_than_delta  yes
+  h2b         dep/nltk_arc/ewt_test->gentle                       confirmatory  document        1.0    5.15      [1.06, 9.17]    better_by_more_than_delta  yes
+  h2b         dep/nltk_arc/ewt_test->gentle                       confirmatory  document        2.0    5.15      [1.06, 9.17]    better_not_shown_by_delta  yes
+  h2b         dep/nltk_arc/ewt_test->gentle                       confirmatory  sentence        1.0    5.15      [3.24, 7.06]    better_by_more_than_delta  yes
+  h2b         dep/udpipe_ewt/ewt_test->gentle                     confirmatory  document        0.5    4.57      [0.79, 8.41]    better_by_more_than_delta  yes
+  h2b         dep/udpipe_ewt/ewt_test->gentle                     confirmatory  document        1.0    4.57      [0.79, 8.41]    better_not_shown_by_delta  yes
+  h2b         dep/udpipe_ewt/ewt_test->gentle                     confirmatory  document        2.0    4.57      [0.79, 8.41]    better_not_shown_by_delta  yes
+  h2b         dep/udpipe_ewt/ewt_test->gentle                     confirmatory  sentence        1.0    4.57      [2.50, 6.59]    better_by_more_than_delta  yes
+  h2b         dep/stanza_ewt/ewt_test->gentle                     confirmatory  document        0.5    2.59      [-0.40, 5.88]   inconclusive               no
+  h2b         dep/stanza_ewt/ewt_test->gentle                     confirmatory  document        1.0    2.59      [-0.40, 5.88]   inconclusive               no
+  h2b         dep/stanza_ewt/ewt_test->gentle                     confirmatory  document        2.0    2.59      [-0.40, 5.88]   inconclusive               no
+  h2b         dep/stanza_ewt/ewt_test->gentle                     confirmatory  sentence        1.0    2.59      [1.05, 4.15]    better_by_more_than_delta  yes
+  h2b         dep/stanza_comb/ewt_test->gentle                    confirmatory  document        0.5    0.73      [-2.04, 3.79]   inconclusive               no
+  h2b         dep/stanza_comb/ewt_test->gentle                    confirmatory  document        1.0    0.73      [-2.04, 3.79]   inconclusive               no
+  h2b         dep/stanza_comb/ewt_test->gentle                    confirmatory  document        2.0    0.73      [-2.04, 3.79]   inconclusive               no
+  h2b         dep/stanza_comb/ewt_test->gentle                    confirmatory  sentence        1.0    0.73      [-0.81, 2.28]   inconclusive               no
+  h2b         dep/stanza_trf/ewt_test->gentle                     confirmatory  document        0.5    -1.72     [-3.94, 0.62]   inconclusive               no
+  h2b         dep/stanza_trf/ewt_test->gentle                     confirmatory  document        1.0    -1.72     [-3.94, 0.62]   inconclusive               no
+  h2b         dep/stanza_trf/ewt_test->gentle                     confirmatory  document        2.0    -1.72     [-3.94, 0.62]   inconclusive               no
+  h2b         dep/stanza_trf/ewt_test->gentle                     confirmatory  sentence        1.0    -1.72     [-3.10, -0.29]  worse_not_shown_by_delta   no
+  h2b         con/stanza_con/wsj_01->mctb_en                      confirmatory  file->sentence  0.5    7.86      [6.68, 9.13]    better_by_more_than_delta  yes
+  h2b         con/stanza_con/wsj_01->mctb_en                      confirmatory  file->sentence  1.0    7.86      [6.68, 9.13]    better_by_more_than_delta  yes
+  h2b         con/stanza_con/wsj_01->mctb_en                      confirmatory  file->sentence  2.0    7.86      [6.68, 9.13]    better_by_more_than_delta  yes
+  h2b         con/stanza_con/wsj_01->mctb_en                      confirmatory  sentence        1.0    7.86      [6.98, 8.74]    better_by_more_than_delta  yes
+  h2b         con/stanza_con_trf/wsj_01->mctb_en                  confirmatory  file->sentence  0.5    6.61      [5.86, 7.40]    better_by_more_than_delta  yes
+  h2b         con/stanza_con_trf/wsj_01->mctb_en                  confirmatory  file->sentence  1.0    6.61      [5.86, 7.40]    better_by_more_than_delta  yes
+  h2b         con/stanza_con_trf/wsj_01->mctb_en                  confirmatory  file->sentence  2.0    6.61      [5.86, 7.40]    better_by_more_than_delta  yes
+  h2b         con/stanza_con_trf/wsj_01->mctb_en                  confirmatory  sentence        1.0    6.61      [6.02, 7.20]    better_by_more_than_delta  yes
+  h2b         con/benepar/wsj_01->mctb_en                         confirmatory  file->sentence  0.5    5.73      [4.89, 6.62]    better_by_more_than_delta  yes
+  h2b         con/benepar/wsj_01->mctb_en                         confirmatory  file->sentence  1.0    5.73      [4.89, 6.62]    better_by_more_than_delta  yes
+  h2b         con/benepar/wsj_01->mctb_en                         confirmatory  file->sentence  2.0    5.73      [4.89, 6.62]    better_by_more_than_delta  yes
+  h2b         con/benepar/wsj_01->mctb_en                         confirmatory  sentence        1.0    5.73      [5.07, 6.38]    better_by_more_than_delta  yes
+  h2c         pos/ewt_test/stanza_ewt->stanza_comb/equivalence    exploratory   document        0.5    -0.24     [-0.41, -0.07]  practically_equivalent     yes
+  h2c         pos/ewt_test/stanza_ewt->stanza_comb/equivalence    exploratory   document        1.0    -0.24     [-0.41, -0.07]  practically_equivalent     yes
+  h2c         pos/ewt_test/stanza_ewt->stanza_comb/equivalence    exploratory   document        2.0    -0.24     [-0.41, -0.07]  practically_equivalent     yes
+  h2c         pos/ewt_test/stanza_ewt->stanza_comb/equivalence    exploratory   sentence        1.0    -0.24     [-0.40, -0.08]  practically_equivalent     yes
+  h2c         pos/gentle/stanza_ewt->stanza_comb/superiority      confirmatory  document        0.5    1.40      [0.10, 3.23]    better_not_shown_by_delta  no
+  h2c         pos/gentle/stanza_ewt->stanza_comb/superiority      confirmatory  document        1.0    1.40      [0.10, 3.23]    better_not_shown_by_delta  no
+  h2c         pos/gentle/stanza_ewt->stanza_comb/superiority      confirmatory  document        2.0    1.40      [0.10, 3.23]    better_not_shown_by_delta  no
+  h2c         pos/gentle/stanza_ewt->stanza_comb/superiority      confirmatory  sentence        1.0    1.40      [1.02, 1.78]    better_by_more_than_delta  yes
+  h2c         dep/ewt_test/stanza_ewt->stanza_comb/equivalence    exploratory   document        0.5    -0.03     [-0.59, 0.58]   inconclusive               no
+  h2c         dep/ewt_test/stanza_ewt->stanza_comb/equivalence    exploratory   document        1.0    -0.03     [-0.59, 0.58]   practically_equivalent     yes
+  h2c         dep/ewt_test/stanza_ewt->stanza_comb/equivalence    exploratory   document        2.0    -0.03     [-0.59, 0.58]   practically_equivalent     yes
+  h2c         dep/ewt_test/stanza_ewt->stanza_comb/equivalence    exploratory   sentence        1.0    -0.03     [-0.47, 0.40]   practically_equivalent     yes
+  h2c         dep/gentle/stanza_ewt->stanza_comb/superiority      confirmatory  document        0.5    1.83      [1.01, 2.62]    better_by_more_than_delta  yes
+  h2c         dep/gentle/stanza_ewt->stanza_comb/superiority      confirmatory  document        1.0    1.83      [1.01, 2.62]    better_by_more_than_delta  yes
+  h2c         dep/gentle/stanza_ewt->stanza_comb/superiority      confirmatory  document        2.0    1.83      [1.01, 2.62]    better_not_shown_by_delta  no
+  h2c         dep/gentle/stanza_ewt->stanza_comb/superiority      confirmatory  sentence        1.0    1.83      [1.24, 2.42]    better_by_more_than_delta  yes
+
+  A row whose plan unit is already the sentence (MCTB_en) has no separate sentence row.
+
+  On the sentences EVALB scores for both parsers (statistics.subset_sensitivity evalb_both_parsers), descriptive:
+  hypothesis  row                                                      status        unit      sentences     Delta  95 % CI       half-width  Delta, all sentences
+  ----------  -------------------------------------------------------  ------------  --------  ------------  -----  ------------  ----------  --------------------
+  h1a         con/con_stanza/wsj_01/stanza_con->stanza_con_trf         exploratory   file      1962 of 1993  2.65   [2.08, 3.16]  0.54        2.65
+  h1a         con/con_benepar/wsj_01/stanza_con->benepar               exploratory   file      1945 of 1993  1.86   [1.41, 2.27]  0.43        1.96
+  h1a         con/con_stanza/mctb_en/stanza_con->stanza_con_trf        confirmatory  sentence  4227 of 5000  3.89   [3.52, 4.28]  0.38        3.89
+  h1a         con/con_benepar/mctb_en/stanza_con->benepar              confirmatory  sentence  4122 of 5000  3.93   [3.58, 4.27]  0.35        4.09
+  h2b         con/wsj_01->mctb_en/step_max/stanza_con->stanza_con_trf  confirmatory  file      1962 of 1993  2.65   [2.08, 3.16]  0.54        2.65
+
+  No class and no verdict: this changes none. An EVALB-error sentence adds nothing to its
+  parser's F1 (0 matched, gold and test), so the main Delta ('Delta, all sentences', the
+  row of the hypothesis table) compares two F1 values over the sentences each parser alone
+  was scored on; here the sentences either parser could not be scored on are left out for
+  both. The same unit and index matrix as the main estimate: a filter on the counts, not a
+  new draw. An h2b row is the Delta_step,max term of the H2b rows, on their source set.
+  csv/thesis_sensitivity.csv has each as the row <row>/evalb_both_parsers=<sentences>,
+  with no delta, class or holds.
+
+------------------------------------------------------------------------------------------
+  VERDICTS - a hypothesis holds only if every part of it holds, per status
+------------------------------------------------------------------------------------------
+  hypothesis  status        parts  holding  holds  note
+  ----------  ------------  -----  -------  -----  --------------------------------------------------------------------------------------------
+  h1a         exploratory   7      7        yes
+  h1a         confirmatory  7      7        yes
+  h1b         exploratory   1      1        yes    not the verdict: the plan gives it to gentle
+  h1b         confirmatory  1      1        yes
+  h2a         exploratory   3      2        no
+  h2b         confirmatory  12     7        no
+  h2c         exploratory   2      2        yes
+  h2c         confirmatory  2      1        no
+  h1          exploratory   8      8        yes    its H1b part is not the verdict of H1b: the plan gives that to gentle
+  h1          confirmatory  8      8        yes
+  h2          exploratory   5      4        no     H2b has no exploratory part and does not enter it: H2 on the exploratory sets is H2a + H2c
+  h2          confirmatory  14     8        no     H2a has no confirmatory part and does not enter it: H2 on the confirmatory sets is H2b + H2c
+
+  Whole hypotheses: h1 = h1a + h1b; h2 = h2a + h2b + h2c (per status, every part the plan defines for that status; a component with
+  no part of the status does not enter it, and the note says so).
+
+------------------------------------------------------------------------------------------
+  AWAITING THE CONFIRMATORY RUN
+------------------------------------------------------------------------------------------
+  nothing: every part of every hypothesis is in this run

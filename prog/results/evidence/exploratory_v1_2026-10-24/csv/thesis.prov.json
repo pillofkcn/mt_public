@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "run_dir": "results/run_2026-10-24",
+  "plan": {
+    "path": "plan/v1.yaml",
+    "sha256": "34f81ee577ed14f1b5a975a05bcbc4dd3fb5f655b4644f14f48e1e964d210268"
+  },
+  "measured": [
+    {
+      "plan": {
+        "path": "plan/v1.yaml",
+        "sha256": "872bad0c9ccb04e0c9656ee013a681c58c621c2ab07e46df970ee3fb840c5193"
+      },
+      "commit": "8db582d59610782687efdc27e2c03fd8b9201c6c",
+      "counts": [
+        "csv/counts_pos_ewt_test.csv",
+        "csv/counts_dep_ewt_test.csv",
+        "csv/counts_con_wsj_01.csv"
+      ],
+      "relation": "an earlier plan, read from git at the commit with the sha256 recorded, equal to the plan analysed in training_data, datasets, configurations, tasks, descriptive.d2, statistics.bootstrap.seed"
+    }
+  ],
+  "counts": {
+    "csv/counts_pos_ewt_test.csv": "adcb054616abe38501de45aa55ec437ac9c1e4b3a9edf37dafef1777a923e35e",
+    "csv/counts_dep_ewt_test.csv": "a615036397d0c8ff5c392ef969ba282993eb47afba3037630b8f617d2e0deb61",
+    "csv/counts_con_wsj_01.csv": "c27bdbfd0636d1989987bcc04226ccaeed2c5eadfc8146472eb270676d5d2903"
+  },
+  "tables": {
+    "csv/thesis_scores.csv": "d8f85745498786fd3fccaca88b6c85fd7b4c56cc4a21453c92f5076d4c36504b",
+    "csv/thesis_h1a.csv": "62dad993514e078ed6950df5326016539d1ed6a49e9ebc472fe1b8740916cd3c",
+    "csv/thesis_h1b.csv": "5f6b4e9b0279f4703e5857550a141739d860932e2e79aa47bd7946367225b34b",
+    "csv/thesis_h2a.csv": "98f8ed27e8300d01ba03097028241ac559b090f3e07cb4127010d23d21eb639e",
+    "csv/thesis_h2b.csv": "139e640ee2b964ef7bb6177f41b548cffe7a82639acb0ab4fcc1c98bce204353",
+    "csv/thesis_h2c.csv": "489a51a23d76384979c23645fd987b891c4c947370831a5e83bf0c1c81ccd664",
+    "csv/thesis_d2_coverage.csv": "0ff48fc71cf7bb4bd4a1008bdf1a8e37bbc692493e5576a3b28068bc9e8c3a6a",
+    "csv/thesis_d2_f1.csv": "e6482ef87e32382f0ce340a4c0a8af44ee90c19ec6fe8504f0df6798a501effc",
+    "csv/thesis_d3.csv": "edcf72717e037ac397e58c5b7427b94da3e5ce694aa38ce9cfe1d2ce826f2181",
+    "csv/thesis_d4.csv": "7339a2bc2d7c7ffc3117b2c823bdd14a660ddaa5bf29c6bb5b47612d0c179c49",
+    "csv/thesis_descriptive.csv": "35dbb013ef1dfd756694bb9cb106dff5136b75ab02bd191c47c8e218cbe3bf9e",
+    "csv/thesis_sensitivity.csv": "4f19c90bd0cdb069b1fc6f9730a91994fc57576fb55047e0ea2fef5a3408ec5e",
+    "csv/thesis_verdicts.csv": "7b9ac96f2eda83ae8049736e60024c28d66fa07fa905786e03513f4ebca7adaa"
+  }
+}

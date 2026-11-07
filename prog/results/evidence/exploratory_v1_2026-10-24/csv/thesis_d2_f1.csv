@@ -1,0 +1,11 @@
+dataset,status,pcfg_config,config,sentences,f1
+wsj_01,exploratory,pcfg_words,pcfg_words,12,68.3333
+wsj_01,exploratory,pcfg_words,stanza_con,12,96.6102
+wsj_01,exploratory,pcfg_words,stanza_con_trf,12,97.4359
+wsj_01,exploratory,pcfg_words,benepar,12,97.9943
+wsj_01,exploratory,pcfg_words,supar_con,12,97.4504
+wsj_01,exploratory,pcfg_tags,pcfg_tags,212,73.0864
+wsj_01,exploratory,pcfg_tags,stanza_con,212,94.7954
+wsj_01,exploratory,pcfg_tags,stanza_con_trf,212,96.4981
+wsj_01,exploratory,pcfg_tags,benepar,212,95.9501
+wsj_01,exploratory,pcfg_tags,supar_con,212,95.7204

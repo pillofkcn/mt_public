@@ -1,0 +1,4 @@
+task,config,source,target,status,m_in,m_out,drop,ci_low,ci_high,half_width
+pos,rdr_ewt,ewt_test,gentle,confirmatory,93.3649,85.9711,7.3938,4.1496,11.1422,3.4963
+pos,udpipe_ewt,ewt_test,gentle,confirmatory,94.8314,88.1285,6.7029,3.7985,10.0778,3.1397
+con,supar_con,wsj_01,mctb_en,confirmatory,94.2164,81.8530,12.3634,11.6891,13.0775,0.6942

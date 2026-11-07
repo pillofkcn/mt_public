@@ -1,0 +1,127 @@
+# requirements-lock.txt - the exact versions of the environment of version 1.0
+#
+# Generated on 24 Oct 2026 with `pip freeze --all` from the virtual environment
+# version 1.0 was built, tested and smoke-run in (prog/.venv): Python 3.13.0,
+# Windows 11 (x86-64), CPU only. Nothing was installed or upgraded for it.
+#
+# This is the install target for reproducing version 1.0, from prog/:
+#     python -m pip install -r requirements-lock.txt
+#     python -m pip install -e . --no-deps
+# (or LOCKED=1 bash setup.sh, which does the same and then the rest of the
+# setup). The second command installs this project itself without resolving
+# anything again; its line of the freeze is the comment below. pyproject.toml
+# keeps its version ranges, and requirements.lock stays the record of the
+# environment of 11 Sep 2026; neither is this file.
+#
+# torch==2.10.0 is the CPU build PyPI serves for Windows; on Linux the same
+# pin installs a CUDA build unless pip is pointed at PyTorch's CPU index.
+# en_core_web_sm is installed from its wheel, checked by its SHA-256.
+#
+# Not pip packages, so not pinned here:
+#   - Stanza's resources index 1.11.0 (resources_1.11.0.json of
+#     github.com/stanfordnlp/stanza-resources), which stanza 1.11.1 resolves
+#     its models against. The models a run loads are named and checked by the
+#     wrappers (wrappers/stanza.py); setup.sh downloads them.
+#   - The transformer google/electra-large-discriminator at revision
+#     c13c3df7efadc2162f42588bd28eb4e187d602a5, the revision wrappers/stanza.py
+#     records (_TRANSFORMER_REVISIONS) and the only one it loads.
+#
+# The provenance of a run (environment.libraries of counts_*.prov.json) names
+# the versions of the libraries it measured with; they are the ones below.
+accelerate==1.13.0
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anyio==4.12.1
+benepar==0.2.0
+blis==1.3.3
+catalogue==2.0.10
+certifi==2026.2.25
+charset-normalizer==3.4.6
+click==8.3.1
+cloudpathlib==0.23.0
+colorama==0.4.6
+confection==0.1.5
+contourpy==1.3.3
+cycler==0.12.1
+cymem==2.0.13
+dill==0.4.1
+emoji==2.15.0
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl#sha256=1932429db727d4bff3deed6b34cfc05df17794f4a52eeb26cf8928f7c1a0fb85
+filelock==3.25.2
+fonttools==4.62.1
+fsspec==2026.2.0
+h11==0.16.0
+hf-xet==1.4.2
+httpcore==1.0.9
+httpx==0.28.1
+huggingface_hub==1.7.2
+idna==3.11
+iniconfig==2.3.0
+Jinja2==3.1.6
+joblib==1.5.3
+kiwisolver==1.5.0
+markdown-it-py==4.0.0
+MarkupSafe==3.0.3
+matplotlib==3.10.8
+mdurl==0.1.2
+mpmath==1.3.0
+murmurhash==1.0.15
+networkx==3.6.1
+nltk==3.9.3
+numpy==2.4.3
+packaging==26.0
+pandas==3.0.1
+pillow==12.1.1
+pip==26.0.1
+platformdirs==4.9.4
+pluggy==1.6.0
+preshed==3.0.13
+protobuf==7.34.1
+psutil==7.2.2
+pydantic==2.12.5
+pydantic_core==2.41.5
+Pygments==2.19.2
+pyparsing==3.3.2
+pytest==8.4.2
+python-dateutil==2.9.0.post0
+PyYAML==6.0.3
+regex==2026.2.28
+requests==2.32.5
+rich==14.3.3
+safetensors==0.7.0
+scikit-learn==1.8.0
+scipy==1.17.1
+seaborn==0.13.2
+sentencepiece==0.2.1
+setuptools==82.0.1
+shellingham==1.5.4
+six==1.17.0
+smart_open==7.5.1
+spacy==3.8.11
+spacy-legacy==3.0.12
+spacy-loggers==1.0.5
+srsly==2.5.3
+stanza==1.11.1
+supar==1.1.4
+sympy==1.14.0
+# syntactic-analysis (this project, editable): python -m pip install -e . --no-deps
+termcolor==3.3.0
+thinc==8.3.11
+threadpoolctl==3.6.0
+tokenizers==0.22.2
+torch==2.10.0
+torch-struct==0.5
+tqdm==4.67.3
+transformers==5.3.0
+typer==0.24.1
+typer-slim==0.24.0
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+tzdata==2025.3
+udapi==0.5.2
+udtools==0.2.7
+ufal.udpipe==1.4.0.1
+urllib3==2.6.3
+wasabi==1.1.3
+weasel==0.4.3
+wrapt==2.1.2

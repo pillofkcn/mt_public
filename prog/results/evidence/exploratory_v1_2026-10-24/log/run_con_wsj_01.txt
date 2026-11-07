@@ -1,0 +1,75 @@
+python scripts/constituency_parsing.py --gold wsj01 --out-dir results/run_2026-10-24
+
+STAGE con on wsj_01 (exploratory): 6 configuration(s), 1993 of 1993 sentences
+  plan plan/v1.yaml sha256 872bad0c9ccb04e0c9656ee013a681c58c621c2ab07e46df970ee3fb840c5193
+  gold sha256 1a74ae5683cdc12bfee2bc3fe8db014dda535bd3ce8744b5eea5a901de494416
+  downloads: none (HF_HUB_OFFLINE=1, SYNTACTIC_ANALYSIS_OFFLINE=1)
+  tokens: brackets ptb, quotes ptb; given to every configuration in the ptb convention, 0 converted among those scored
+  D2 sample: 250 of 1993 sentences (seed 20260101), 250 among those scored
+pcfg_words: building (nltk.NltkAnalyzer)
+  pcfg_words: 250 sentences, F1 5.18, 12 parsed (no_derivation 7, over_length 17, unknown_word 214)
+pcfg_tags: building (nltk.NltkAnalyzer)
+  pcfg_tags: 250 sentences, F1 64.82, 212 parsed (no_derivation 21, over_length 17)
+stanza_con: building (stanza.StanzaAnalyzer)
+    250/1993 sentences
+    500/1993 sentences
+    750/1993 sentences
+    1000/1993 sentences
+    1250/1993 sentences
+    1500/1993 sentences
+    1750/1993 sentences
+  stanza_con: 1993 sentences, F1 92.93, 1993 parsed
+stanza_con_trf: building (stanza.StanzaAnalyzer)
+
+Loading weights:   0%|          | 0/389 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 389/389 [00:00<00:00, 47450.47it/s]
+[1mElectraModel LOAD REPORT[0m from: google/electra-large-discriminator
+Key                                               | Status     |  | 
+--------------------------------------------------+------------+--+-
+discriminator_predictions.dense.bias              | UNEXPECTED |  | 
+discriminator_predictions.dense_prediction.bias   | UNEXPECTED |  | 
+discriminator_predictions.dense_prediction.weight | UNEXPECTED |  | 
+electra.embeddings_project.weight                 | UNEXPECTED |  | 
+electra.embeddings_project.bias                   | UNEXPECTED |  | 
+discriminator_predictions.dense.weight            | UNEXPECTED |  | 
+
+[3mNotes:
+- UNEXPECTED[3m	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.[0m
+    250/1993 sentences
+    500/1993 sentences
+    750/1993 sentences
+    1000/1993 sentences
+    1250/1993 sentences
+    1500/1993 sentences
+    1750/1993 sentences
+  stanza_con_trf: 1993 sentences, F1 95.58, 1993 parsed
+benepar: building (benepar.BeneparAnalyzer)
+    250/1993 sentences
+    500/1993 sentences
+    750/1993 sentences
+    1000/1993 sentences
+    1250/1993 sentences
+    1500/1993 sentences
+    1750/1993 sentences
+  benepar: 1993 sentences, F1 94.89, 1993 parsed
+supar_con: building (supar.SuparAnalyzer)
+    250/1993 sentences
+    500/1993 sentences
+    750/1993 sentences
+    1000/1993 sentences
+    1250/1993 sentences
+    1500/1993 sentences
+    1750/1993 sentences
+  supar_con: 1993 sentences, F1 94.22, 1993 parsed
+
+SUMMARY con on wsj_01
+config | sentences | F1 | parsed
+--- | --- | --- | ---
+pcfg_words | 250 | 5.18 | 12
+pcfg_tags | 250 | 64.82 | 212
+stanza_con | 1993 | 92.93 | 1993
+stanza_con_trf | 1993 | 95.58 | 1993
+benepar | 1993 | 94.89 | 1993
+supar_con | 1993 | 94.22 | 1993
+written: results/run_2026-10-24/csv/counts_con_wsj_01.csv
+         results/run_2026-10-24/csv/counts_con_wsj_01.prov.json

@@ -1,0 +1,413 @@
+# plan/v1.yaml - the experiment, stated once.
+#
+# Read by syntactic_analysis.plan.load(). It refuses an unknown key at every
+# level, a wrapper that does not exist, and a reference to anything not
+# declared here. Scripts read this file; no value in it is repeated in code.
+#
+# Paths are relative to prog/ (project.project_root()), not to this file.
+# Quote anything YAML 1.1 would read as a number, boolean or date: "00", dates.
+
+schema: 1
+
+plan:
+  id: v1
+  title: Method level, training data and domain shift in English syntactic analysis
+  date: "2026-10-23"
+
+# --- training data -------------------------------------------------------------
+# One id per corpus a model was trained on. `family` groups releases of one corpus;
+# an H1a chain holds one id fixed and accepts another release of the same family
+# only where it lists it under `approximations`.
+training_data:
+  ewt_train_snapshot:
+    name: UD_English-EWT train, repository snapshot (master 2026-03-23, post-2.13)
+    family: ud_english_ewt
+    annotation: ud
+    path: data/en_ewt-ud-train.conllu
+  ewt_train_r2_15:
+    name: UD_English-EWT r2.15 train (Stanza ewt package)
+    family: ud_english_ewt
+    annotation: ud
+  ud_combined_r2_15:
+    name: "UD 2.15: EWT, GUM, GUMReddit train + PUD, Pronouns test + Stanza hand-parsed English sentences (Stanza combined package)"
+    family: ud_english_combined
+    annotation: ud
+  nltk_tagger_unstated:
+    name: corpus not stated in the NLTK documentation (PTB tags)
+    family: nltk_tagger_unstated
+    annotation: ptb
+  ontonotes5:
+    name: OntoNotes 5 (spaCy en_core_web_sm; dependencies in the ClearNLP conversion)
+    family: ontonotes5
+    annotation: ontonotes
+  wsj_00_nltk_sample:
+    name: WSJ section 00 of the NLTK Penn Treebank sample (1921 sentences)
+    family: ptb_wsj_sample
+    annotation: ptb
+  ptb_revised_wsj_02_21:
+    name: Penn Treebank revised (LDC2015T13), WSJ sections 02-21
+    family: ptb_wsj_revised
+    annotation: ptb
+  ptb3_wsj_02_21:
+    name: Penn Treebank 3, WSJ sections 02-21
+    family: ptb_wsj
+    annotation: ptb
+
+# --- datasets ------------------------------------------------------------------
+# source: where scripts/fetch_data.py downloads the local copy at `path` from,
+#         pinned to a tag or a commit; required for a confirmatory dataset. One
+#         file is stored at `path`, several inside `path` under their own names,
+#         and their SHA-256 is recorded in <path>.sha256 (see data/DATASET.md).
+# tokens: how a constituency dataset writes brackets and double quotes (ptb:
+#         -LRB-/-RRB-, `` and ''; raw: "); required for a dataset with task con
+#         and no other. Every constituency configuration is given its sentence
+#         in the ptb convention, as on WSJ 01; a raw " becomes `` or '' by
+#         alternation within the sentence, opening first, and the dataset's own
+#         words are put back before scoring (ptb_conventions.parser_tokens,
+#         restore_words). MCTB_en from the one format check before the lock
+#         (24 Oct 2026, CHANGELOG_v1.md): -LRB- 341, -RRB- 276, `` 0, '' 0, " 1016.
+datasets:
+  ewt_test:
+    name: UD_English-EWT test, repository snapshot (2077 sentences, 25094 tokens)
+    tasks: [pos, dep]
+    status: exploratory
+    path: data/en_ewt-ud-test.conllu
+    license: CC BY-SA 4.0
+    resampling: {unit: document, unit_id: newdoc_id_else_sent_id_prefix, expected_units: 316}
+  wsj_01:
+    name: Penn Treebank WSJ section 01, NLTK sample (1993 sentences)
+    tasks: [con]
+    status: exploratory
+    nltk_sections: ["01"]
+    license: Penn Treebank sample, (C) LDC 1995, distributed with NLTK under fair use; non-commercial use only
+    resampling: {unit: file, unit_id: wsj_fileid, expected_units: 100}
+    tokens: {brackets: ptb, quotes: ptb}
+  gentle:
+    name: UD_English-GENTLE, UD 2.18 (test only)
+    tasks: [pos, dep]
+    status: confirmatory
+    path: data/en_gentle-ud-test.conllu
+    source:
+      repository: https://github.com/UniversalDependencies/UD_English-GENTLE
+      ref: r2.18
+      files: [en_gentle-ud-test.conllu]
+    license: CC BY-NC-SA 4.0
+    resampling: {unit: document, unit_id: newdoc_id, expected_units: 26}
+  mctb_en:
+    name: MCTB_en, multi-domain constituency treebank (Yang et al. 2022)
+    tasks: [con]
+    status: confirmatory
+    path: data/mctb_en
+    source:
+      repository: https://github.com/RingoS/multi-domain-parsing-analysis
+      ref: 1ad06f47e3b08a4d1338473e67f9911cf795eba2     # 2022-09-22
+      files:
+        - data/MCTB_en/dialogue.cleaned.txt
+        - data/MCTB_en/forum.cleaned.txt
+        - data/MCTB_en/law.cleaned.txt
+        - data/MCTB_en/literature.cleaned.txt
+        - data/MCTB_en/review.cleaned.txt
+    license: MIT
+    resampling: {unit: sentence}
+    tokens: {brackets: ptb, quotes: raw}
+
+# --- configurations ------------------------------------------------------------
+# wrapper: <module in syntactic_analysis.wrappers>.<class>
+# init:    constructor keywords, checked against the constructor's signature
+# load:    load_model keywords; named parameters only, never **kwargs pass-through
+# inputs:  constructor keywords whose value is ANOTHER configuration, built first
+# datasets: the datasets the configuration is scored on; when absent, every
+#          dataset of its tasks. Each must be a dataset of one of its tasks. A
+#          restriction may not leave out a dataset a hypothesis or descriptive
+#          section needs the configuration on (an H1a chain on every dataset
+#          of its task, H1b, H2a, H2b and H2c on theirs, D2 on its datasets,
+#          an input wherever the configuration taking it is scored). D3 and D4
+#          are computed on the datasets where every one of their members is
+#          scored. Added 24 Oct 2026.
+# pending: not runnable yet; missing_params = init keys the wrapper does not accept
+#          (none is pending since step 4, 23 Oct 2026)
+# syntactic_analysis.build.build(plan, key) constructs, loads and checks one.
+configurations:
+  rdr_ewt:
+    wrapper: rdrpos.RdrPosAnalyzer
+    model: RDRPOSTagger retrained on EWT train with the authors' learner (commit eb8b11d2, run outside the repository, PYTHONHASHSEED 20260101) by scripts/train_rdrpos.py (model_cache/rdrpos_ewt)
+    training: ewt_train_snapshot
+    optional: true
+    init: {key: rdr_ewt}
+    load: {model_name: en_ewt_train}
+  nltk_pre:
+    wrapper: nltk.NltkAnalyzer
+    model: NLTK averaged_perceptron_tagger_eng as shipped, PTB tags converted to UPOS
+    training: nltk_tagger_unstated
+    # EWT test only (the owner's decision of 24 Oct 2026, CHANGELOG_v1.md):
+    # its one role is the H2a pair with nltk_ewt, and H2a is computed on EWT
+    # test only; on GENTLE its pair is not computed, not even descriptively,
+    # so it is not scored there at all.
+    datasets: [ewt_test]
+    init: {key: nltk_pre, tagger_model: pretrained, upos_rules: true}
+    load: {model_name: averaged_perceptron_tagger_eng}
+  nltk_ewt:
+    wrapper: nltk.NltkAnalyzer
+    model: NLTK averaged perceptron trained here on EWT train (model_cache/nltk_perceptron_ud_ewt_train)
+    training: ewt_train_snapshot
+    init: {key: nltk_ewt, tagger_model: ud_ewt_train}
+    load: {}
+  udpipe_ewt:
+    wrapper: udpipe.UdpipeAnalyzer
+    model: UDPipe 1 refitted by scripts/train_udpipe.py (model_cache/english-ewt-retrained.udpipe)
+    training: ewt_train_snapshot
+    init: {key: udpipe_ewt, model: en_ewt_retrained}
+    load: {}
+  spacy_sm:
+    wrapper: spacy.SpacyAnalyzer
+    model: spaCy en_core_web_sm 3.8.0; ClearNLP (SD) relations mapped to UD (map_tier full)
+    training: ontonotes5
+    # EWT test only (the owner's decision of 24 Oct 2026, as for nltk_pre):
+    # its H2a pairs with spacy_ewt (pos, dep) are computed on EWT test only,
+    # so D3 (dep), which compares it with the UD parsers, is computed on EWT
+    # test only as well.
+    datasets: [ewt_test]
+    init: {key: spacy_sm, model: en_core_web_sm, map_tier: full}
+    load: {model_name: en_core_web_sm}
+  spacy_ewt:
+    wrapper: spacy.SpacyAnalyzer
+    model: spaCy pipeline (tok2vec, morphologizer, parser) trained on EWT train by scripts/train_spacy.py, seed 20260101 (model_cache/spacy_ewt/model-best); relations UD, ROOT written back as root (map_tier casing), no SD->UD relabelling
+    training: ewt_train_snapshot
+    init: {key: spacy_ewt, model: ewt_train, map_tier: casing}
+    load: {}
+  stanza_ewt:
+    wrapper: stanza.StanzaAnalyzer
+    model: Stanza en, package ewt (ewt_charlm)
+    training: ewt_train_r2_15
+    init: {key: stanza_ewt, package: ewt}
+    load: {model_name: en}
+  stanza_comb:
+    wrapper: stanza.StanzaAnalyzer
+    model: Stanza en, package combined (combined_charlm), without the package's constituency parser
+    training: ud_combined_r2_15
+    # A member of pos and dep only: constituency false keeps Stanza's
+    # constituency processor out of its pipeline (it changes no tag or arc).
+    init: {key: stanza_comb, package: combined, constituency: false}
+    load: {model_name: en}
+  stanza_trf:
+    wrapper: stanza.StanzaAnalyzer
+    model: "Stanza en: package combined with pos and depparse combined_electra-large (BiLSTM over frozen google/electra-large-discriminator, revision c13c3df7efad)"
+    training: ud_combined_r2_15
+    init: {key: stanza_trf, package: combined_electra-large}
+    load: {model_name: en}
+  nltk_arc:
+    wrapper: nltk_transition.NltkTransitionAnalyzer
+    model: NLTK TransitionParser, arc-eager, LogisticRegression in place of NLTK's SVC (model_cache/nltk_transition-arc-eager.pkl); test-time UPOS from udpipe_ewt
+    training: ewt_train_snapshot
+    init: {key: nltk_arc}
+    inputs: {pos_source: udpipe_ewt}
+    load: {model_name: arc-eager}
+  pcfg_words:
+    wrapper: nltk.NltkAnalyzer
+    model: NLTK ViterbiParser, PCFG induced from WSJ 00 (treebank grammar), word terminals
+    training: wsj_00_nltk_sample
+    init: {key: pcfg_words, pcfg_input: words, grammar: treebank, train_sections: ["00"], max_sentence_length: 40}
+    load: {}
+  pcfg_tags:
+    wrapper: nltk.NltkAnalyzer
+    model: the same PCFG over tag terminals; tags from the shipped NLTK perceptron
+    training: wsj_00_nltk_sample
+    init: {key: pcfg_tags, pcfg_input: tags, pcfg_tags_source: nltk, grammar: treebank, train_sections: ["00"], max_sentence_length: 40}
+    load: {}
+  stanza_con:
+    wrapper: stanza.StanzaAnalyzer
+    model: Stanza en constituency ptb3-revised_charlm; tags from the combined package's tagger (combined_charlm)
+    training: ptb_revised_wsj_02_21
+    init: {key: stanza_con, package: combined}
+    load: {model_name: en}
+  stanza_con_trf:
+    wrapper: stanza.StanzaAnalyzer
+    model: Stanza en constituency ptb3-revised_electra-large (BiLSTM over frozen google/electra-large-discriminator, revision c13c3df7efad); tags from the combined package's tagger (combined_charlm)
+    training: ptb_revised_wsj_02_21
+    init: {key: stanza_con_trf, package: combined, constituency_model: ptb3-revised_electra-large}
+    load: {model_name: en}
+  benepar:
+    wrapper: benepar.BeneparAnalyzer
+    model: benepar_en3 (T5-small encoder) over spaCy en_core_web_sm
+    training: ptb_revised_wsj_02_21
+    init: {}
+    load: {model_name: en_core_web_sm, benepar_model: benepar_en3}
+  supar_con:
+    wrapper: supar.SuparAnalyzer
+    model: SuPar crf-con-en (CharLSTM)
+    training: ptb3_wsj_02_21
+    init: {key: supar_con, dep_model: null, con_model: crf-con-en}
+    load: {}
+
+# --- tasks: level and roles per task ------------------------------------------
+# roles must equal what the hypotheses and descriptive sections imply, plus
+# `descriptive`, the one role no section implies.
+tasks:
+  pos:
+    metric: {name: upos_accuracy, aggregation: micro}
+    configs:
+      # udpipe_ewt is a tagger here because nltk_arc takes its tags (its
+      # pos_source); its UPOS is reported descriptively.
+      rdr_ewt:     {level: L0, roles: [descriptive]}
+      nltk_pre:    {level: L1, roles: [h2a]}
+      nltk_ewt:    {level: L1, roles: [h1a, h2a, h2b, d4]}
+      udpipe_ewt:  {level: L1, roles: [descriptive]}
+      spacy_sm:    {level: L2, roles: [h2a]}
+      spacy_ewt:   {level: L2, roles: [h2a, d4]}
+      stanza_ewt:  {level: L3, roles: [h1a, h2b, h2c]}
+      stanza_comb: {level: L3, roles: [h1a, h1b, h2b, h2c]}
+      stanza_trf:  {level: L4, roles: [h1a, h1b, h2b]}
+  dep:
+    metric: {name: las, aggregation: micro, convention: conll2018, deprel_subtypes: strip}
+    configs:
+      nltk_arc:    {level: L1, roles: [h1a, h2b]}
+      udpipe_ewt:  {level: L2, roles: [h1a, h2b]}
+      spacy_sm:    {level: L2, roles: [h2a, d3]}
+      spacy_ewt:   {level: L2, roles: [h2a]}
+      stanza_ewt:  {level: L3, roles: [h1a, h2b, h2c]}
+      stanza_comb: {level: L3, roles: [h1a, h1b, h2b, h2c]}
+      stanza_trf:  {level: L4, roles: [h1a, h1b, h2b]}
+  con:
+    metric: {name: bracket_f1, aggregation: micro, evalb: collins, nml: collapse_both_sides}
+    configs:
+      pcfg_words:     {level: L1, roles: [d2]}
+      pcfg_tags:      {level: L1, roles: [d2]}
+      stanza_con:     {level: L3, roles: [h1a, h2b]}
+      stanza_con_trf: {level: L4, roles: [h1a, h2b]}
+      benepar:        {level: L4, roles: [h1a, h2b]}
+      # supar_con is in no H1a chain, so it is not in H2b either; its scores on
+      # WSJ 01 and MCTB_en, and the drop between them, are reported descriptively.
+      supar_con:      {level: L3, roles: [descriptive]}
+
+# --- hypotheses ------------------------------------------------------------------
+# H1a is computed on every dataset of its task; the dataset's status says whether
+# the result is exploratory or confirmatory. H1b names its datasets, and the one
+# whose result is its verdict; H2a names its datasets.
+#
+# Verdicts are given per status. A part holds by its own criterion. A whole
+# hypothesis (H1 = H1a + H1b, H2 = H2a + H2b + H2c) is decided, for a status,
+# from the parts the plan defines for that status, and holds when every one of
+# them holds. A component with no dataset of that status (H2a has no
+# confirmatory one, H2b no exploratory one) does not enter it, and the note of
+# the row in thesis_verdicts.csv says so.
+hypotheses:
+  h1a:
+    pos:
+      # spacy_ewt (L2) is not in this chain: the literature predicts L1 ~ L2 for
+      # POS (Kyle and Eguchi 2024). Its step from nltk_ewt is descriptive D4.
+      - id: pos_ewt
+        training: ewt_train_snapshot
+        configs: [nltk_ewt, stanza_ewt]
+        approximations: {stanza_ewt: ewt_train_r2_15}
+      - id: pos_combined
+        training: ud_combined_r2_15
+        configs: [stanza_comb, stanza_trf]
+    dep:
+      - id: dep_ewt
+        training: ewt_train_snapshot
+        configs: [nltk_arc, udpipe_ewt, stanza_ewt]
+        approximations: {stanza_ewt: ewt_train_r2_15}
+      - id: dep_combined
+        training: ud_combined_r2_15
+        configs: [stanza_comb, stanza_trf]
+    con:
+      - id: con_stanza
+        training: ptb_revised_wsj_02_21
+        configs: [stanza_con, stanza_con_trf]
+      - id: con_benepar
+        training: ptb_revised_wsj_02_21
+        configs: [stanza_con, benepar]
+  # H1b: the step to the pretrained transformer gains more for dependencies than
+  # for POS. Delta of the first leg minus Delta of the second, both from the same
+  # bootstrap replicate of the same documents; it holds when the lower bound of
+  # its 95% CI lies above 0. Constituency does not enter H1b.
+  h1b:
+    baseline: stanza_comb
+    treatment: stanza_trf
+    legs:
+      - {task: dep, metric: las}
+      - {task: pos, metric: upos_accuracy}
+    datasets: [ewt_test, gentle]
+    verdict: gentle
+  # H2: Delta_step,max is the largest point estimate of an H1a step in the same
+  # task on the same test set. H2b is computed for the models of the H1a chains
+  # of its task, exactly those.
+  # H2a is computed on EWT test only (decided 24 Oct 2026, CHANGELOG_v1.md): the
+  # brief states it on EWT, the training domain of nltk_ewt and spacy_ewt, and
+  # on GENTLE neither model of a pair is in its domain. H2a is therefore
+  # exploratory only; its pairs are not computed on GENTLE, not even
+  # descriptively, and nltk_pre and spacy_sm are not scored there at all
+  # (configurations.<key>.datasets; decided 24 Oct 2026, second round).
+  h2a:
+    datasets: [ewt_test]
+    pos:
+      - {id: pos_nltk, baseline: nltk_pre, treatment: nltk_ewt}
+      - {id: pos_spacy, baseline: spacy_sm, treatment: spacy_ewt}
+    dep:
+      - {id: dep_spacy, baseline: spacy_sm, treatment: spacy_ewt}
+  h2b:
+    pos: {source: ewt_test, target: gentle, configs: [nltk_ewt, stanza_ewt, stanza_comb, stanza_trf]}
+    dep: {source: ewt_test, target: gentle, configs: [nltk_arc, udpipe_ewt, stanza_ewt, stanza_comb, stanza_trf]}
+    con: {source: wsj_01, target: mctb_en, configs: [stanza_con, stanza_con_trf, benepar]}
+  h2c:
+    pos:
+      baseline: stanza_ewt
+      treatment: stanza_comb
+      tests:
+        - {dataset: ewt_test, decision: equivalence}
+        - {dataset: gentle, decision: superiority}
+    dep:
+      baseline: stanza_ewt
+      treatment: stanza_comb
+      tests:
+        - {dataset: ewt_test, decision: equivalence}
+        - {dataset: gentle, decision: superiority}
+
+# D2-D4. There is no D1: it compared UDPipe 1 with the published UD 2.5 model
+# against UDPipe 1 retrained on EWT train, and was dropped with that model on
+# 23 Oct 2026. The labels D2-D4 were kept, and D1 is not reused.
+descriptive:
+  d2:
+    task: con
+    configs: [pcfg_words, pcfg_tags]
+    versus: [stanza_con, stanza_con_trf, benepar, supar_con]
+    datasets: [wsj_01, mctb_en]
+    sample: {sentences: 250, seed: 20260101, max_tokens: 40, drawn_from: all_sentences}
+    report: [coverage_by_failure_reason, f1_on_processed_sentences]
+  # D3 and D4 are computed on the datasets of their task where the plan scores
+  # every one of their members (configurations.<key>.datasets): D3 on EWT test
+  # only, since spacy_sm is scored there only (24 Oct 2026); D4 on EWT test
+  # and GENTLE.
+  d3:
+    task: dep
+    config: spacy_sm
+    versus: [nltk_arc, udpipe_ewt, spacy_ewt, stanza_ewt, stanza_comb, stanza_trf]
+    metrics: [las, clas]
+  d4:
+    # The L1 -> L2 step for POS that H1a leaves out: UPOS, Delta with its CI, no criterion.
+    task: pos
+    baseline: nltk_ewt
+    treatment: spacy_ewt
+
+statistics:
+  scale: points                  # metrics in percentage points; delta in the same unit
+  delta: 1.0
+  delta_sensitivity: [0.5, 2.0]
+  bootstrap:
+    method: paired_percentile
+    replicates: 10000
+    confidence: 0.95
+    seed: 20260101               # the seed of the runs before v1 (evaluation/stats.py BOOTSTRAP_SEED until 23 Oct 2026)
+  unit_sensitivity: sentence
+  # A descriptive sensitivity analysis (24 Oct 2026, before the lock,
+  # CHANGELOG_v1.md): every Delta between two constituency parsers on one set -
+  # each H1a con step on every con dataset, and the Delta_step,max term of the
+  # H2b con rows on their source set - also on the sentences EVALB scores for
+  # BOTH parsers (the union of their EVALB-error sentences left out), with the
+  # number of those sentences; the same unit and the same index matrix as the
+  # main estimate (a filter on the counts, not a new draw). No class and no
+  # verdict: it changes none.
+  subset_sensitivity: evalb_both_parsers
+  decisions:
+    equivalence: ci_within_plus_minus_delta     # whole CI inside (-delta, +delta)
+    superiority: ci_lower_bound_above_delta     # CI lower bound > +delta

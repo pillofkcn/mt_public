@@ -1,0 +1,326 @@
+{
+  "schema": 1,
+  "task": "con",
+  "metric": {
+    "name": "bracket_f1",
+    "options": {
+      "evalb": "collins",
+      "nml": "collapse_both_sides"
+    }
+  },
+  "columns": [
+    "config",
+    "dataset",
+    "doc_id",
+    "sent_id",
+    "index",
+    "n_tokens",
+    "matched",
+    "gold",
+    "test",
+    "parsed",
+    "evalb_error",
+    "failure",
+    "d2_sample"
+  ],
+  "dataset": {
+    "id": "wsj_01",
+    "status": "exploratory",
+    "nltk_sections": [
+      "01"
+    ],
+    "sha256": "1a74ae5683cdc12bfee2bc3fe8db014dda535bd3ce8744b5eea5a901de494416",
+    "sentences": 1993,
+    "tokens": 47633,
+    "unit": "file",
+    "units": 100
+  },
+  "plan": {
+    "path": "plan/v1.yaml",
+    "sha256": "34f81ee577ed14f1b5a975a05bcbc4dd3fb5f655b4644f14f48e1e964d210268"
+  },
+  "git": {
+    "commit": "3b010352a79a26a24dd8bbeedb56bd5fad7caab3",
+    "branch": "v1-simplify",
+    "dirty": false,
+    "dirty_scope": "prog/"
+  },
+  "environment": {
+    "python": "3.13.0",
+    "implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel (AMD64)",
+    "libraries": {
+      "numpy": "2.4.3",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.8.0",
+      "nltk": "3.9.3",
+      "stanza": "1.11.1",
+      "torch": "2.10.0",
+      "transformers": "5.3.0",
+      "tokenizers": "0.22.2",
+      "huggingface-hub": "1.7.2",
+      "safetensors": "0.7.0",
+      "sentencepiece": "0.2.1",
+      "protobuf": "7.34.1",
+      "spacy": "3.8.11",
+      "thinc": "8.3.11",
+      "en_core_web_sm": "3.8.0",
+      "ufal.udpipe": "1.4.0.1",
+      "benepar": "0.2.0",
+      "supar": "1.1.4",
+      "torch-struct": "0.5",
+      "pyyaml": "6.0.3"
+    }
+  },
+  "offline": {
+    "switches": {
+      "HF_HUB_OFFLINE": "1",
+      "SYNTACTIC_ANALYSIS_OFFLINE": "1"
+    },
+    "downloads_allowed": false
+  },
+  "configurations": {
+    "pcfg_words": {
+      "wrapper": "nltk.NltkAnalyzer",
+      "tool": {
+        "nltk": "3.9.3"
+      },
+      "init": {
+        "key": "pcfg_words",
+        "pcfg_input": "words",
+        "grammar": "treebank",
+        "train_sections": [
+          "00"
+        ],
+        "max_sentence_length": 40
+      },
+      "load": {},
+      "inputs": {},
+      "level": "L1",
+      "training": {
+        "id": "wsj_00_nltk_sample",
+        "name": "WSJ section 00 of the NLTK Penn Treebank sample (1921 sentences)"
+      },
+      "model": "NLTK ViterbiParser, PCFG induced from WSJ 00 (treebank grammar), word terminals",
+      "model_version": "PCFG treebank over words from WSJ 00@e3cc444955b8 (20163 productions, max_sentence_length 40)",
+      "training_corpus": "nltk treebank sample, section 00, 1921 sent (PCFG, traces stripped)",
+      "method_detail": "PCFG",
+      "scheme": "PTB",
+      "domain": "out",
+      "seed": {
+        "training": "deterministic induction, no random draw",
+        "record": null,
+        "note": "grammar induced when the model is loaded, from WSJ section 00 of the NLTK Penn Treebank sample (1921 sentences)",
+        "inference": 20260101
+      }
+    },
+    "pcfg_tags": {
+      "wrapper": "nltk.NltkAnalyzer",
+      "tool": {
+        "nltk": "3.9.3"
+      },
+      "init": {
+        "key": "pcfg_tags",
+        "pcfg_input": "tags",
+        "pcfg_tags_source": "nltk",
+        "grammar": "treebank",
+        "train_sections": [
+          "00"
+        ],
+        "max_sentence_length": 40
+      },
+      "load": {},
+      "inputs": {},
+      "level": "L1",
+      "training": {
+        "id": "wsj_00_nltk_sample",
+        "name": "WSJ section 00 of the NLTK Penn Treebank sample (1921 sentences)"
+      },
+      "model": "the same PCFG over tag terminals; tags from the shipped NLTK perceptron",
+      "model_version": "PCFG treebank over tags from WSJ 00@c9b9839507a4 (10375 productions, max_sentence_length 40); tags averaged_perceptron_tagger_eng@244627c8fb90",
+      "training_corpus": "neuvedený v dokumentácii NLTK (značky PTB) / nltk treebank sample, section 00, 1921 sent (PCFG, traces stripped, unlexicalised)",
+      "method_detail": "Averaged Perceptron / PCFG, unlexicalised, parsed over tags",
+      "scheme": "PTB",
+      "domain": "out",
+      "seed": {
+        "training": "deterministic induction, no random draw",
+        "record": null,
+        "note": "grammar induced when the model is loaded, from WSJ section 00 of the NLTK Penn Treebank sample (1921 sentences)",
+        "inference": 20260101
+      }
+    },
+    "stanza_con": {
+      "wrapper": "stanza.StanzaAnalyzer",
+      "tool": {
+        "stanza": "1.11.1",
+        "torch": "2.10.0",
+        "transformers": "5.3.0"
+      },
+      "init": {
+        "key": "stanza_con",
+        "package": "combined"
+      },
+      "load": {
+        "model_name": "en"
+      },
+      "inputs": {},
+      "level": "L3",
+      "training": {
+        "id": "ptb_revised_wsj_02_21",
+        "name": "Penn Treebank revised (LDC2015T13), WSJ sections 02-21"
+      },
+      "model": "Stanza en constituency ptb3-revised_charlm; tags from the combined package's tagger (combined_charlm)",
+      "model_version": "en/combined [tokenize=combined, mwt=combined, pos=combined_charlm, lemma=combined_nocharlm, constituency=ptb3-revised_charlm, depparse=combined_charlm]; pos/depparse trained on UD 2.15 (stanza 1.11.1, resources 1.11.0)",
+      "training_corpus": "PTB3 revised WSJ 02-21 (constituency)",
+      "method_detail": "BiLSTM",
+      "scheme": "PTB",
+      "domain": "out",
+      "seed": {
+        "training": "published model",
+        "record": null,
+        "note": null,
+        "inference": 20260101
+      }
+    },
+    "stanza_con_trf": {
+      "wrapper": "stanza.StanzaAnalyzer",
+      "tool": {
+        "stanza": "1.11.1",
+        "torch": "2.10.0",
+        "transformers": "5.3.0"
+      },
+      "init": {
+        "key": "stanza_con_trf",
+        "package": "combined",
+        "constituency_model": "ptb3-revised_electra-large"
+      },
+      "load": {
+        "model_name": "en"
+      },
+      "inputs": {},
+      "level": "L4",
+      "training": {
+        "id": "ptb_revised_wsj_02_21",
+        "name": "Penn Treebank revised (LDC2015T13), WSJ sections 02-21"
+      },
+      "model": "Stanza en constituency ptb3-revised_electra-large (BiLSTM over frozen google/electra-large-discriminator, revision c13c3df7efad); tags from the combined package's tagger (combined_charlm)",
+      "model_version": "en/combined [tokenize=combined, mwt=combined, pos=combined_charlm, lemma=combined_nocharlm, constituency=ptb3-revised_electra-large, depparse=combined_charlm]; pos/depparse trained on UD 2.15; transformer google/electra-large-discriminator@c13c3df7efad (stanza 1.11.1, resources 1.11.0)",
+      "training_corpus": "PTB3 revised WSJ 02-21 (constituency)",
+      "method_detail": "BiLSTM over frozen ELECTRA-large",
+      "scheme": "PTB",
+      "domain": "out",
+      "seed": {
+        "training": "published model",
+        "record": null,
+        "note": null,
+        "inference": 20260101
+      }
+    },
+    "benepar": {
+      "wrapper": "benepar.BeneparAnalyzer",
+      "tool": {
+        "benepar": "0.2.0",
+        "spacy": "3.8.11",
+        "torch": "2.10.0",
+        "transformers": "5.3.0"
+      },
+      "init": {},
+      "load": {
+        "model_name": "en_core_web_sm",
+        "benepar_model": "benepar_en3"
+      },
+      "inputs": {},
+      "level": "L4",
+      "training": {
+        "id": "ptb_revised_wsj_02_21",
+        "name": "Penn Treebank revised (LDC2015T13), WSJ sections 02-21"
+      },
+      "model": "benepar_en3 (T5-small encoder) over spaCy en_core_web_sm",
+      "model_version": "benepar_en3 on en_core_web_sm-3.8.0",
+      "training_corpus": "PTB revised WSJ 02-21, T5-small encoder (benepar_en3)",
+      "method_detail": "Chart-based neural",
+      "scheme": "PTB",
+      "domain": "out",
+      "seed": {
+        "training": "published model",
+        "record": null,
+        "note": null,
+        "inference": 20260101
+      }
+    },
+    "supar_con": {
+      "wrapper": "supar.SuparAnalyzer",
+      "tool": {
+        "supar": "1.1.4",
+        "torch": "2.10.0"
+      },
+      "init": {
+        "key": "supar_con",
+        "dep_model": null,
+        "con_model": "crf-con-en"
+      },
+      "load": {},
+      "inputs": {},
+      "level": "L3",
+      "training": {
+        "id": "ptb3_wsj_02_21",
+        "name": "Penn Treebank 3, WSJ sections 02-21"
+      },
+      "model": "SuPar crf-con-en (CharLSTM)",
+      "model_version": "con=crf-con-en",
+      "training_corpus": "PTB WSJ 02-21 (Penn Treebank constituency) (crf-con-en)",
+      "method_detail": "con: CRF (CharLSTM encoder)",
+      "scheme": "PTB",
+      "domain": "out",
+      "seed": {
+        "training": "published model",
+        "record": null,
+        "note": null,
+        "inference": 20260101
+      }
+    }
+  },
+  "not_run_by_plan": {},
+  "failed": {},
+  "run": {
+    "command": "python scripts/constituency_parsing.py --gold wsj01 --confirmatory --out-dir results/run_2026-10-25",
+    "started": "2026-10-25T13:21:57+01:00",
+    "finished": "2026-10-25T14:42:14+01:00",
+    "max_sentences": null,
+    "confirmatory": true,
+    "sentences_scored": 1993,
+    "configurations": [
+      "pcfg_words",
+      "pcfg_tags",
+      "stanza_con",
+      "stanza_con_trf",
+      "benepar",
+      "supar_con"
+    ],
+    "completed": true
+  },
+  "evalb_parameter_set": "collins_nml",
+  "d2": {
+    "sentences": 250,
+    "seed": 20260101,
+    "max_tokens": 40,
+    "drawn_from": "all_sentences",
+    "configs": [
+      "pcfg_words",
+      "pcfg_tags"
+    ],
+    "sampled": 250,
+    "sampled_sha256": "1f45b40d9db999dd483bc5701bd133e69712578e3705bdd1ff8b62f3a5678caf",
+    "sampled_scored": 250
+  },
+  "input_tokens": {
+    "dataset": {
+      "brackets": "ptb",
+      "quotes": "ptb"
+    },
+    "given": "ptb",
+    "rule": "syntactic_analysis.ptb_conventions.parser_tokens",
+    "converted": 0
+  }
+}

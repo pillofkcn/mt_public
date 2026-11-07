@@ -1,0 +1,24 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# The .sha256 files must have LF on Windows too: `sha256sum -c` reads the file
+# name up to the end of the line, so with CRLF it would look for a file whose
+# name ends in \r.
+*.sha256 text eol=lf
+
+# Shell scripts have LF in every checkout, so bash reads them anywhere.
+*.sh text eol=lf
+
+# The plan and its lock have LF in every checkout, so the bytes a person and
+# sha256sum see are the bytes the lock records.
+plan/*.yaml text eol=lf
+plan/*.json text eol=lf
+
+# The frozen runs of version 1.0: the SHA-256 of their counts files in README.md
+# and plan/deviations.md are those of exactly these bytes, so no checkout
+# changes them on any platform.
+results/evidence/** -text
+
+# Binary artefacts must not be normalised
+*.png binary
+*.gz binary

@@ -1,0 +1,13 @@
+dataset,status,metric,baseline,other,m_baseline,m_other,delta,ci_low,ci_high,half_width
+ewt_test,exploratory,las,spacy_sm,nltk_arc,51.2393,75.9704,24.7310,23.3402,26.1020,1.3809
+ewt_test,exploratory,las,spacy_sm,udpipe_ewt,51.2393,80.6089,29.3696,27.9257,30.7481,1.4112
+ewt_test,exploratory,las,spacy_sm,spacy_ewt,51.2393,83.4622,32.2228,30.9768,33.4412,1.2322
+ewt_test,exploratory,las,spacy_sm,stanza_ewt,51.2393,88.4793,37.2400,35.9020,38.5810,1.3395
+ewt_test,exploratory,las,spacy_sm,stanza_comb,51.2393,88.4474,37.2081,35.6719,38.8079,1.5680
+ewt_test,exploratory,las,spacy_sm,stanza_trf,51.2393,92.4564,41.2170,39.8697,42.6080,1.3691
+ewt_test,exploratory,clas,spacy_sm,nltk_arc,56.1199,71.6387,15.5188,13.9000,17.1111,1.6055
+ewt_test,exploratory,clas,spacy_sm,udpipe_ewt,56.1199,75.4434,19.3236,17.6006,20.9742,1.6868
+ewt_test,exploratory,clas,spacy_sm,spacy_ewt,56.1199,79.2280,23.1081,21.6888,24.4604,1.3858
+ewt_test,exploratory,clas,spacy_sm,stanza_ewt,56.1199,84.7057,28.5859,27.1751,29.9769,1.4009
+ewt_test,exploratory,clas,spacy_sm,stanza_comb,56.1199,84.6844,28.5645,26.9250,30.2737,1.6744
+ewt_test,exploratory,clas,spacy_sm,stanza_trf,56.1199,89.7031,33.5833,32.1769,35.0436,1.4333

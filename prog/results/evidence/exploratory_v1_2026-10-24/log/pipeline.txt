@@ -1,0 +1,14 @@
+run dir     : results/run_2026-10-24
+plan sha256 : 872bad0c9ccb04e0c9656ee013a681c58c621c2ab07e46df970ee3fb840c5193
+git         : 8db582d59610782687efdc27e2c03fd8b9201c6c (v1-simplify), dirty=False
+started     : 2026-10-24T20:02:01+02:00
+finished    : 2026-10-24T21:42:19+02:00
+total time  : 1 h 40 min (6018 s)
+
+stage         status    commands
+pos           ok        1
+dep           ok        1
+con           ok        1
+analyze       ok        1
+figures       ok        1
+

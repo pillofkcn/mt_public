@@ -1,0 +1,2 @@
+dataset,status,baseline,treatment,m_baseline,m_treatment,delta,ci_low,ci_high,half_width
+ewt_test,exploratory,nltk_ewt,spacy_ewt,93.8950,94.7079,0.8129,0.5303,1.0961,0.2829

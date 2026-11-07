@@ -1,0 +1,5 @@
+dataset,status,config,sampled,parsed,unknown_word,no_derivation,over_length,error,coverage
+wsj_01,exploratory,pcfg_words,250,12,214,7,17,0,4.8000
+wsj_01,exploratory,pcfg_tags,250,212,0,21,17,0,84.8000
+mctb_en,confirmatory,pcfg_words,250,19,213,5,13,0,7.6000
+mctb_en,confirmatory,pcfg_tags,250,177,0,60,13,0,70.8000

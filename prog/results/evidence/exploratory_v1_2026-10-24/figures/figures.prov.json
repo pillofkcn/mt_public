@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "run_dir": "results/run_2026-10-24",
+  "plan": {
+    "path": "plan/v1.yaml",
+    "sha256": "34f81ee577ed14f1b5a975a05bcbc4dd3fb5f655b4644f14f48e1e964d210268"
+  },
+  "tables": {
+    "csv/thesis_h1a.csv": "62dad993514e078ed6950df5326016539d1ed6a49e9ebc472fe1b8740916cd3c",
+    "csv/thesis_h1b.csv": "5f6b4e9b0279f4703e5857550a141739d860932e2e79aa47bd7946367225b34b",
+    "csv/thesis_h2a.csv": "98f8ed27e8300d01ba03097028241ac559b090f3e07cb4127010d23d21eb639e",
+    "csv/thesis_h2b.csv": "139e640ee2b964ef7bb6177f41b548cffe7a82639acb0ab4fcc1c98bce204353",
+    "csv/thesis_h2c.csv": "489a51a23d76384979c23645fd987b891c4c947370831a5e83bf0c1c81ccd664"
+  },
+  "figures": {
+    "fig1_h1": {
+      "tables": [
+        "csv/thesis_h1a.csv",
+        "csv/thesis_h1b.csv"
+      ],
+      "files": {
+        "fig1_h1.png": "f8d2c577594180928141112a720c282ff11028e70d8114c10894c664f4cb08d6",
+        "fig1_h1.pdf": "93de96e6403e1bb7797f6e658d175b07e91b84a5b10d52be03dbd8a512b4c669"
+      },
+      "panels": {
+        "h1a/pos": {
+          "intervals": 2,
+          "notes": [
+            "čaká na konfirmačný beh: gentle"
+          ]
+        },
+        "h1a/dep": {
+          "intervals": 3,
+          "notes": [
+            "čaká na konfirmačný beh: gentle"
+          ]
+        },
+        "h1a/con": {
+          "intervals": 2,
+          "notes": [
+            "čaká na konfirmačný beh: mctb_en"
+          ]
+        },
+        "h1b": {
+          "intervals": 3,
+          "notes": [
+            "čaká na konfirmačný beh: gentle"
+          ]
+        }
+      }
+    },
+    "fig2_h2": {
+      "tables": [
+        "csv/thesis_h2a.csv",
+        "csv/thesis_h2b.csv"
+      ],
+      "files": {
+        "fig2_h2.png": "40972b351a2c6494215f2f6470a6b04eb9d027674b6c568a03e4ea75ac2b20b4",
+        "fig2_h2.pdf": "4a7bb6c8e2b141555d49d6351f5317d85c29fcdc84c13451c56d04cda05113a9"
+      },
+      "panels": {
+        "h2a/effect": {
+          "intervals": 3,
+          "notes": []
+        },
+        "h2a/criterion": {
+          "intervals": 3,
+          "notes": []
+        },
+        "h2b/effect": {
+          "intervals": 0,
+          "notes": [
+            "čaká na konfirmačný beh: gentle, mctb_en"
+          ]
+        },
+        "h2b/criterion": {
+          "intervals": 0,
+          "notes": []
+        }
+      }
+    },
+    "fig3_h2c": {
+      "tables": [
+        "csv/thesis_h2c.csv"
+      ],
+      "files": {
+        "fig3_h2c.png": "459879a659615f533fa3217c7e44c7e0417397010d0aaebc97b78d59b91c9e46",
+        "fig3_h2c.pdf": "24766382532358ee8cf66725ec5dc3b605a9e35f36d089f949b81efcf094ab84"
+      },
+      "panels": {
+        "h2c/pos": {
+          "intervals": 1,
+          "notes": [
+            "čaká na konfirmačný beh: gentle"
+          ]
+        },
+        "h2c/dep": {
+          "intervals": 1,
+          "notes": [
+            "čaká na konfirmačný beh: gentle"
+          ]
+        }
+      }
+    }
+  },
+  "delta": 1.0,
+  "dpi": 300,
+  "matplotlib": "3.10.8",
+  "command": "python scripts/make_figures.py --run-dir results/run_2026-10-24",
+  "created": "2026-10-24T23:59:17+02:00"
+}

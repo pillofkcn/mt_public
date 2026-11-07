@@ -1,0 +1,126 @@
+python scripts/pos_tagging.py --dataset ewt_test --out-dir results/run_2026-10-24
+
+STAGE pos on ewt_test (exploratory): 9 configuration(s), 2077 of 2077 sentences
+  plan plan/v1.yaml sha256 872bad0c9ccb04e0c9656ee013a681c58c621c2ab07e46df970ee3fb840c5193
+  gold sha256 b837531faddd54f5c89cf5259cfe5306b075556a9ff19b2271393df29c6b02f8
+  downloads: none (HF_HUB_OFFLINE=1, SYNTACTIC_ANALYSIS_OFFLINE=1)
+rdr_ewt: building (rdrpos.RdrPosAnalyzer)
+    250/2077 sentences
+    500/2077 sentences
+    750/2077 sentences
+    1000/2077 sentences
+    1250/2077 sentences
+    1500/2077 sentences
+    1750/2077 sentences
+    2000/2077 sentences
+  rdr_ewt: 2077 sentences, UPOS 93.36
+nltk_pre: building (nltk.NltkAnalyzer)
+    250/2077 sentences
+    500/2077 sentences
+    750/2077 sentences
+    1000/2077 sentences
+    1250/2077 sentences
+    1500/2077 sentences
+    1750/2077 sentences
+    2000/2077 sentences
+  nltk_pre: 2077 sentences, UPOS 86.49
+nltk_ewt: building (nltk.NltkAnalyzer)
+    250/2077 sentences
+    500/2077 sentences
+    750/2077 sentences
+    1000/2077 sentences
+    1250/2077 sentences
+    1500/2077 sentences
+    1750/2077 sentences
+    2000/2077 sentences
+  nltk_ewt: 2077 sentences, UPOS 93.89
+udpipe_ewt: building (udpipe.UdpipeAnalyzer)
+    250/2077 sentences
+    500/2077 sentences
+    750/2077 sentences
+    1000/2077 sentences
+    1250/2077 sentences
+    1500/2077 sentences
+    1750/2077 sentences
+    2000/2077 sentences
+  udpipe_ewt: 2077 sentences, UPOS 94.83
+spacy_sm: building (spacy.SpacyAnalyzer)
+    250/2077 sentences
+    500/2077 sentences
+    750/2077 sentences
+    1000/2077 sentences
+    1250/2077 sentences
+    1500/2077 sentences
+    1750/2077 sentences
+    2000/2077 sentences
+  spacy_sm: 2077 sentences, UPOS 92.83
+spacy_ewt: building (spacy.SpacyAnalyzer)
+    250/2077 sentences
+    500/2077 sentences
+    750/2077 sentences
+    1000/2077 sentences
+    1250/2077 sentences
+    1500/2077 sentences
+    1750/2077 sentences
+    2000/2077 sentences
+  spacy_ewt: 2077 sentences, UPOS 94.71
+stanza_ewt: building (stanza.StanzaAnalyzer)
+    250/2077 sentences
+    500/2077 sentences
+    750/2077 sentences
+    1000/2077 sentences
+    1250/2077 sentences
+    1500/2077 sentences
+    1750/2077 sentences
+    2000/2077 sentences
+  stanza_ewt: 2077 sentences, UPOS 97.01
+stanza_comb: building (stanza.StanzaAnalyzer)
+    250/2077 sentences
+    500/2077 sentences
+    750/2077 sentences
+    1000/2077 sentences
+    1250/2077 sentences
+    1500/2077 sentences
+    1750/2077 sentences
+    2000/2077 sentences
+  stanza_comb: 2077 sentences, UPOS 96.77
+stanza_trf: building (stanza.StanzaAnalyzer)
+
+Loading weights:   0%|          | 0/389 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 389/389 [00:00<00:00, 74870.79it/s]
+[1mElectraModel LOAD REPORT[0m from: google/electra-large-discriminator
+Key                                               | Status     |  | 
+--------------------------------------------------+------------+--+-
+discriminator_predictions.dense.weight            | UNEXPECTED |  | 
+discriminator_predictions.dense.bias              | UNEXPECTED |  | 
+electra.embeddings_project.bias                   | UNEXPECTED |  | 
+discriminator_predictions.dense_prediction.weight | UNEXPECTED |  | 
+discriminator_predictions.dense_prediction.bias   | UNEXPECTED |  | 
+electra.embeddings_project.weight                 | UNEXPECTED |  | 
+
+[3mNotes:
+- UNEXPECTED[3m	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.[0m
+    250/2077 sentences
+    500/2077 sentences
+    750/2077 sentences
+    1000/2077 sentences
+    1250/2077 sentences
+    1500/2077 sentences
+    1750/2077 sentences
+    2000/2077 sentences
+  stanza_trf: 2077 sentences, UPOS 97.81
+
+SUMMARY pos on ewt_test
+config | sentences | UPOS
+--- | --- | ---
+rdr_ewt | 2077 | 93.36
+nltk_pre | 2077 | 86.49
+nltk_ewt | 2077 | 93.89
+udpipe_ewt | 2077 | 94.83
+spacy_sm | 2077 | 92.83
+spacy_ewt | 2077 | 94.71
+stanza_ewt | 2077 | 97.01
+stanza_comb | 2077 | 96.77
+stanza_trf | 2077 | 97.81
+written: results/run_2026-10-24/csv/counts_pos_ewt_test.csv
+         results/run_2026-10-24/csv/counts_pos_ewt_test.prov.json

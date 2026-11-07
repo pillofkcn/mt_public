@@ -1,0 +1,17 @@
+python scripts/make_figures.py --run-dir results/run_2026-10-25
+
+figures of results/run_2026-10-25 (plan sha256 34f81ee577ed):
+  fig1_h1: fig1_h1.png, fig1_h1.pdf
+    h1a/pos          4 interval(s)
+    h1a/dep          6 interval(s)
+    h1a/con          4 interval(s)
+    h1b              6 interval(s)
+  fig2_h2: fig2_h2.png, fig2_h2.pdf
+    h2a/effect       3 interval(s)
+    h2a/criterion    3 interval(s)
+    h2b/effect      12 interval(s)
+    h2b/criterion   12 interval(s)
+  fig3_h2c: fig3_h2c.png, fig3_h2c.pdf
+    h2c/pos          2 interval(s)
+    h2c/dep          2 interval(s)
+written: 7 files in results/run_2026-10-25/figures

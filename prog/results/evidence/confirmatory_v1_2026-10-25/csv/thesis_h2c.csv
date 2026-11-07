@@ -1,0 +1,5 @@
+task,dataset,status,decision,baseline,treatment,delta,ci_low,ci_high,half_width,class,holds
+pos,ewt_test,exploratory,equivalence,stanza_ewt,stanza_comb,-0.2391,-0.4111,-0.0682,0.1714,practically_equivalent,yes
+pos,gentle,confirmatory,superiority,stanza_ewt,stanza_comb,1.4046,0.0962,3.2299,1.5668,better_not_shown_by_delta,no
+dep,ewt_test,exploratory,equivalence,stanza_ewt,stanza_comb,-0.0319,-0.5934,0.5810,0.5872,practically_equivalent,yes
+dep,gentle,confirmatory,superiority,stanza_ewt,stanza_comb,1.8259,1.0070,2.6187,0.8059,better_by_more_than_delta,yes

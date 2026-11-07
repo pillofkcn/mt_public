@@ -1,0 +1,13 @@
+hypothesis,status,parts,parts_holding,holds,note
+h1a,exploratory,7,7,yes,
+h1a,confirmatory,7,7,yes,
+h1b,exploratory,1,1,yes,not the verdict: the plan gives it to gentle
+h1b,confirmatory,1,1,yes,
+h2a,exploratory,3,2,no,
+h2b,confirmatory,12,7,no,
+h2c,exploratory,2,2,yes,
+h2c,confirmatory,2,1,no,
+h1,exploratory,8,8,yes,its H1b part is not the verdict of H1b: the plan gives that to gentle
+h1,confirmatory,8,8,yes,
+h2,exploratory,5,4,no,H2b has no exploratory part and does not enter it: H2 on the exploratory sets is H2a + H2c
+h2,confirmatory,14,8,no,H2a has no confirmatory part and does not enter it: H2 on the confirmatory sets is H2b + H2c

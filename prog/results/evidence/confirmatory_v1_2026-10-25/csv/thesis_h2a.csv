@@ -1,0 +1,4 @@
+task,pair,dataset,status,baseline,treatment,m_baseline,m_treatment,delta_source,delta_source_ci_low,delta_source_ci_high,step_chain,step_lower,step_higher,step_max,stat,ci_low,ci_high,half_width,class,holds
+pos,pos_nltk,ewt_test,exploratory,nltk_pre,nltk_ewt,86.4908,93.8950,7.4042,6.7794,8.0360,pos_ewt,nltk_ewt,stanza_ewt,3.1123,4.2919,3.4946,5.0731,0.7893,better_by_more_than_delta,yes
+pos,pos_spacy,ewt_test,exploratory,spacy_sm,spacy_ewt,92.8270,94.7079,1.8809,1.3705,2.3973,pos_ewt,nltk_ewt,stanza_ewt,3.1123,-1.2314,-1.8847,-0.5953,0.6447,worse_not_shown_by_delta,no
+dep,dep_spacy,ewt_test,exploratory,spacy_sm,spacy_ewt,51.2393,83.4622,32.2228,30.9768,33.4412,dep_ewt,udpipe_ewt,stanza_ewt,7.8704,24.3524,22.7917,25.7691,1.4887,better_by_more_than_delta,yes

@@ -1,0 +1,3 @@
+dataset,status,is_verdict,baseline,treatment,delta_las,delta_las_ci_low,delta_las_ci_high,delta_upos,delta_upos_ci_low,delta_upos_ci_high,diff,ci_low,ci_high,half_width,class,holds
+ewt_test,exploratory,no,stanza_comb,stanza_trf,4.0089,3.4695,4.5986,1.0441,0.8082,1.2905,2.9649,2.4565,3.5122,0.5279,better_by_more_than_delta,yes
+gentle,confirmatory,yes,stanza_comb,stanza_trf,6.4610,5.2884,7.7411,1.6012,0.8246,2.4447,4.8598,3.8908,5.8855,0.9973,better_by_more_than_delta,yes

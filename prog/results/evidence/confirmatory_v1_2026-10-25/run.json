@@ -1,0 +1,208 @@
+{
+  "schema": 1,
+  "run_dir": "results/run_2026-10-25",
+  "plan": {
+    "path": "plan/v1.yaml",
+    "sha256": "34f81ee577ed14f1b5a975a05bcbc4dd3fb5f655b4644f14f48e1e964d210268"
+  },
+  "environment": {
+    "python": "3.13.0",
+    "implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel (AMD64)",
+    "libraries": {
+      "numpy": "2.4.3",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.8.0",
+      "nltk": "3.9.3",
+      "stanza": "1.11.1",
+      "torch": "2.10.0",
+      "transformers": "5.3.0",
+      "tokenizers": "0.22.2",
+      "huggingface-hub": "1.7.2",
+      "safetensors": "0.7.0",
+      "sentencepiece": "0.2.1",
+      "protobuf": "7.34.1",
+      "spacy": "3.8.11",
+      "thinc": "8.3.11",
+      "en_core_web_sm": "3.8.0",
+      "ufal.udpipe": "1.4.0.1",
+      "benepar": "0.2.0",
+      "supar": "1.1.4",
+      "torch-struct": "0.5",
+      "pyyaml": "6.0.3"
+    }
+  },
+  "offline": {
+    "HF_HUB_OFFLINE": "1",
+    "SYNTACTIC_ANALYSIS_OFFLINE": "1"
+  },
+  "stages": [
+    {
+      "key": "pos",
+      "script": "scripts/pos_tagging.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/pos_tagging.py",
+          "--dataset",
+          "ewt_test",
+          "--out-dir",
+          "results/run_2026-10-25",
+          "--confirmatory"
+        ],
+        [
+          "python",
+          "scripts/pos_tagging.py",
+          "--dataset",
+          "gentle",
+          "--out-dir",
+          "results/run_2026-10-25",
+          "--confirmatory"
+        ]
+      ],
+      "returncodes": [
+        0,
+        0
+      ],
+      "logs": [
+        "log/run_pos_ewt_test.txt",
+        "log/run_pos_gentle.txt"
+      ],
+      "invocation": "2026-10-25T12:47:54+01:00"
+    },
+    {
+      "key": "dep",
+      "script": "scripts/dependency_parsing.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/dependency_parsing.py",
+          "--dataset",
+          "ewt_test",
+          "--out-dir",
+          "results/run_2026-10-25",
+          "--confirmatory"
+        ],
+        [
+          "python",
+          "scripts/dependency_parsing.py",
+          "--dataset",
+          "gentle",
+          "--out-dir",
+          "results/run_2026-10-25",
+          "--confirmatory"
+        ]
+      ],
+      "returncodes": [
+        0,
+        0
+      ],
+      "logs": [
+        "log/run_dep_ewt_test.txt",
+        "log/run_dep_gentle.txt"
+      ],
+      "invocation": "2026-10-25T12:47:54+01:00"
+    },
+    {
+      "key": "con",
+      "script": "scripts/constituency_parsing.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/constituency_parsing.py",
+          "--gold",
+          "wsj01",
+          "--out-dir",
+          "results/run_2026-10-25",
+          "--confirmatory"
+        ],
+        [
+          "python",
+          "scripts/constituency_parsing.py",
+          "--gold",
+          "mctb",
+          "--out-dir",
+          "results/run_2026-10-25",
+          "--confirmatory"
+        ]
+      ],
+      "returncodes": [
+        0,
+        0
+      ],
+      "logs": [
+        "log/run_con_wsj_01.txt",
+        "log/run_con_mctb_en.txt"
+      ],
+      "invocation": "2026-10-25T12:47:54+01:00"
+    },
+    {
+      "key": "analyze",
+      "script": "scripts/analyze.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/analyze.py",
+          "--run-dir",
+          "results/run_2026-10-25"
+        ]
+      ],
+      "returncodes": [
+        0
+      ],
+      "logs": [
+        "log/run_analyze.txt"
+      ],
+      "invocation": "2026-10-25T12:47:54+01:00"
+    },
+    {
+      "key": "figures",
+      "script": "scripts/make_figures.py",
+      "status": "ok",
+      "commands": [
+        [
+          "python",
+          "scripts/make_figures.py",
+          "--run-dir",
+          "results/run_2026-10-25"
+        ]
+      ],
+      "returncodes": [
+        0
+      ],
+      "logs": [
+        "log/run_figures.txt"
+      ],
+      "invocation": "2026-10-25T12:47:54+01:00"
+    }
+  ],
+  "invocations": [
+    {
+      "started": "2026-10-25T12:47:54+01:00",
+      "finished": "2026-10-25T15:58:34+01:00",
+      "total_seconds": 11440.7,
+      "git": {
+        "commit": "3b010352a79a26a24dd8bbeedb56bd5fad7caab3",
+        "branch": "v1-simplify",
+        "dirty": false,
+        "dirty_scope": "prog/"
+      },
+      "confirmatory": true,
+      "max_sentences": null,
+      "selection": "all",
+      "selected": [
+        "pos",
+        "dep",
+        "con",
+        "analyze",
+        "figures"
+      ],
+      "completed": true
+    }
+  ]
+}

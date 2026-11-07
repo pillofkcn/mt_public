@@ -1,0 +1,327 @@
+{
+  "schema": 1,
+  "task": "pos",
+  "metric": {
+    "name": "upos_accuracy",
+    "options": {}
+  },
+  "columns": [
+    "config",
+    "dataset",
+    "doc_id",
+    "sent_id",
+    "index",
+    "n_tokens",
+    "correct",
+    "total"
+  ],
+  "dataset": {
+    "id": "gentle",
+    "status": "confirmatory",
+    "path": "data/en_gentle-ud-test.conllu",
+    "sha256": "42d12cdef99bcd3160a3241ba1811fe9e7fd4b37a77f9b9e8c2852f04d69f3fa",
+    "sentences": 1334,
+    "tokens": 17799,
+    "unit": "document",
+    "units": 26
+  },
+  "plan": {
+    "path": "plan/v1.yaml",
+    "sha256": "34f81ee577ed14f1b5a975a05bcbc4dd3fb5f655b4644f14f48e1e964d210268"
+  },
+  "git": {
+    "commit": "3b010352a79a26a24dd8bbeedb56bd5fad7caab3",
+    "branch": "v1-simplify",
+    "dirty": false,
+    "dirty_scope": "prog/"
+  },
+  "environment": {
+    "python": "3.13.0",
+    "implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel (AMD64)",
+    "libraries": {
+      "numpy": "2.4.3",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.8.0",
+      "nltk": "3.9.3",
+      "stanza": "1.11.1",
+      "torch": "2.10.0",
+      "transformers": "5.3.0",
+      "tokenizers": "0.22.2",
+      "huggingface-hub": "1.7.2",
+      "safetensors": "0.7.0",
+      "sentencepiece": "0.2.1",
+      "protobuf": "7.34.1",
+      "spacy": "3.8.11",
+      "thinc": "8.3.11",
+      "en_core_web_sm": "3.8.0",
+      "ufal.udpipe": "1.4.0.1",
+      "benepar": "0.2.0",
+      "supar": "1.1.4",
+      "torch-struct": "0.5",
+      "pyyaml": "6.0.3"
+    }
+  },
+  "offline": {
+    "switches": {
+      "HF_HUB_OFFLINE": "1",
+      "SYNTACTIC_ANALYSIS_OFFLINE": "1"
+    },
+    "downloads_allowed": false
+  },
+  "configurations": {
+    "rdr_ewt": {
+      "wrapper": "rdrpos.RdrPosAnalyzer",
+      "tool": {
+        "syntactic_analysis/wrappers/rdrpos.py": "this project's code at git commit 3b010352a79a26a24dd8bbeedb56bd5fad7caab3"
+      },
+      "init": {
+        "key": "rdr_ewt"
+      },
+      "load": {
+        "model_name": "en_ewt_train"
+      },
+      "inputs": {},
+      "level": "L0",
+      "training": {
+        "id": "ewt_train_snapshot",
+        "name": "UD_English-EWT train, repository snapshot (master 2026-03-23, post-2.13)"
+      },
+      "model": "RDRPOSTagger retrained on EWT train with the authors' learner (commit eb8b11d2, run outside the repository, PYTHONHASHSEED 20260101) by scripts/train_rdrpos.py (model_cache/rdrpos_ewt)",
+      "model_version": "rdrpos_ewt/en_ewt-ud-train.UPOS.RDR@250314baa02f, rdrpos_ewt/en_ewt-ud-train.UPOS.DICT@a9fa40103b1f",
+      "training_corpus": "UD_English-EWT train (current split, retrained locally), UPOS rules induced by SCRDR",
+      "method_detail": "SCRDR (Ripple-Down Rules, corpus-induced)",
+      "scheme": "UD",
+      "domain": "in",
+      "seed": {
+        "training": 20260101,
+        "record": "model_cache/rdrpos_ewt/training_record.json",
+        "note": "PYTHONHASHSEED of the learner run",
+        "inference": 20260101
+      }
+    },
+    "nltk_ewt": {
+      "wrapper": "nltk.NltkAnalyzer",
+      "tool": {
+        "nltk": "3.9.3"
+      },
+      "init": {
+        "key": "nltk_ewt",
+        "tagger_model": "ud_ewt_train"
+      },
+      "load": {},
+      "inputs": {},
+      "level": "L1",
+      "training": {
+        "id": "ewt_train_snapshot",
+        "name": "UD_English-EWT train, repository snapshot (master 2026-03-23, post-2.13)"
+      },
+      "model": "NLTK averaged perceptron trained here on EWT train (model_cache/nltk_perceptron_ud_ewt_train)",
+      "model_version": "nltk_perceptron_ud_ewt_train@c43ea07ddad4",
+      "training_corpus": "UD_English-EWT train (current split), 12544 sent / 204577 tok (UPOS)",
+      "method_detail": "Averaged Perceptron",
+      "scheme": "UD",
+      "domain": "in",
+      "seed": {
+        "training": 1,
+        "record": null,
+        "note": "random.seed(_PERCEPTRON_SEED) in wrappers/nltk.py before nltk's PerceptronTagger.train(), which reshuffles the training sentences with Python's global generator after every iteration; nothing else in the training is random",
+        "inference": 20260101
+      }
+    },
+    "udpipe_ewt": {
+      "wrapper": "udpipe.UdpipeAnalyzer",
+      "tool": {
+        "ufal.udpipe": "1.4.0.1"
+      },
+      "init": {
+        "key": "udpipe_ewt",
+        "model": "en_ewt_retrained"
+      },
+      "load": {},
+      "inputs": {},
+      "level": "L1",
+      "training": {
+        "id": "ewt_train_snapshot",
+        "name": "UD_English-EWT train, repository snapshot (master 2026-03-23, post-2.13)"
+      },
+      "model": "UDPipe 1 refitted by scripts/train_udpipe.py (model_cache/english-ewt-retrained.udpipe)",
+      "model_version": "english-ewt-retrained.udpipe@bbdf90fc8148",
+      "training_corpus": "UD_English-EWT train (current split, retrained locally)",
+      "method_detail": "MorphoDiTa perceptron tagger",
+      "scheme": "UD",
+      "domain": "in",
+      "seed": {
+        "training": 42,
+        "record": "model_cache/english-ewt-retrained.udpipe.json",
+        "note": "fixed in UDPipe 1, which has no seed option: its parser training (Parsito, parser_nn_trainer::train) seeds its generator with 42, and its tagger training draws no random number (sources of ufal.udpipe 1.4.0.1); trained by scripts/train_udpipe.py with the library's default options (no tokenizer, default tagger and parser)",
+        "inference": 20260101
+      }
+    },
+    "spacy_ewt": {
+      "wrapper": "spacy.SpacyAnalyzer",
+      "tool": {
+        "spacy": "3.8.11",
+        "thinc": "8.3.11"
+      },
+      "init": {
+        "key": "spacy_ewt",
+        "model": "ewt_train",
+        "map_tier": "casing"
+      },
+      "load": {},
+      "inputs": {},
+      "level": "L2",
+      "training": {
+        "id": "ewt_train_snapshot",
+        "name": "UD_English-EWT train, repository snapshot (master 2026-03-23, post-2.13)"
+      },
+      "model": "spaCy pipeline (tok2vec, morphologizer, parser) trained on EWT train by scripts/train_spacy.py, seed 20260101 (model_cache/spacy_ewt/model-best); relations UD, ROOT written back as root (map_tier casing), no SD->UD relabelling",
+      "model_version": "spacy_ewt/model-best@8d971395dfd7",
+      "training_corpus": "UD_English-EWT train (current split, trained locally)",
+      "method_detail": "CNN",
+      "scheme": "UD",
+      "domain": "in",
+      "seed": {
+        "training": 20260101,
+        "record": "model_cache/spacy_ewt/training_record.json",
+        "note": "spaCy --system.seed of the training run",
+        "inference": 20260101
+      }
+    },
+    "stanza_ewt": {
+      "wrapper": "stanza.StanzaAnalyzer",
+      "tool": {
+        "stanza": "1.11.1",
+        "torch": "2.10.0",
+        "transformers": "5.3.0"
+      },
+      "init": {
+        "key": "stanza_ewt",
+        "package": "ewt"
+      },
+      "load": {
+        "model_name": "en"
+      },
+      "inputs": {},
+      "level": "L3",
+      "training": {
+        "id": "ewt_train_r2_15",
+        "name": "UD_English-EWT r2.15 train (Stanza ewt package)"
+      },
+      "model": "Stanza en, package ewt (ewt_charlm)",
+      "model_version": "en/ewt [tokenize=ewt, mwt=ewt, pos=ewt_charlm, lemma=ewt_nocharlm, depparse=ewt_charlm]; pos/depparse trained on UD 2.15 (stanza 1.11.1, resources 1.11.0)",
+      "training_corpus": "UD_English-EWT r2.15 train only (ewt_charlm, dep/POS)",
+      "method_detail": "BiLSTM",
+      "scheme": "UD",
+      "domain": "in",
+      "seed": {
+        "training": "published model",
+        "record": null,
+        "note": null,
+        "inference": 20260101
+      }
+    },
+    "stanza_comb": {
+      "wrapper": "stanza.StanzaAnalyzer",
+      "tool": {
+        "stanza": "1.11.1",
+        "torch": "2.10.0",
+        "transformers": "5.3.0"
+      },
+      "init": {
+        "key": "stanza_comb",
+        "package": "combined",
+        "constituency": false
+      },
+      "load": {
+        "model_name": "en"
+      },
+      "inputs": {},
+      "level": "L3",
+      "training": {
+        "id": "ud_combined_r2_15",
+        "name": "UD 2.15: EWT, GUM, GUMReddit train + PUD, Pronouns test + Stanza hand-parsed English sentences (Stanza combined package)"
+      },
+      "model": "Stanza en, package combined (combined_charlm), without the package's constituency parser",
+      "model_version": "en/combined [tokenize=combined, mwt=combined, pos=combined_charlm, lemma=combined_nocharlm, depparse=combined_charlm]; pos/depparse trained on UD 2.15 (stanza 1.11.1, resources 1.11.0)",
+      "training_corpus": "UD 2.15 combined: EWT, GUM and GUMReddit train + PUD and Pronouns test + Stanza's hand-parsed English sentences (dep/POS)",
+      "method_detail": "BiLSTM",
+      "scheme": "UD",
+      "domain": "in_plus",
+      "seed": {
+        "training": "published model",
+        "record": null,
+        "note": null,
+        "inference": 20260101
+      }
+    },
+    "stanza_trf": {
+      "wrapper": "stanza.StanzaAnalyzer",
+      "tool": {
+        "stanza": "1.11.1",
+        "torch": "2.10.0",
+        "transformers": "5.3.0"
+      },
+      "init": {
+        "key": "stanza_trf",
+        "package": "combined_electra-large"
+      },
+      "load": {
+        "model_name": "en"
+      },
+      "inputs": {},
+      "level": "L4",
+      "training": {
+        "id": "ud_combined_r2_15",
+        "name": "UD 2.15: EWT, GUM, GUMReddit train + PUD, Pronouns test + Stanza hand-parsed English sentences (Stanza combined package)"
+      },
+      "model": "Stanza en: package combined with pos and depparse combined_electra-large (BiLSTM over frozen google/electra-large-discriminator, revision c13c3df7efad)",
+      "model_version": "en/combined_electra-large [tokenize=combined, mwt=combined, pos=combined_electra-large, lemma=combined_nocharlm, depparse=combined_electra-large]; pos/depparse trained on UD 2.15; transformer google/electra-large-discriminator@c13c3df7efad (stanza 1.11.1, resources 1.11.0)",
+      "training_corpus": "UD 2.15 combined: EWT, GUM and GUMReddit train + PUD and Pronouns test + Stanza's hand-parsed English sentences (dep/POS)",
+      "method_detail": "BiLSTM over frozen ELECTRA-large",
+      "scheme": "UD",
+      "domain": "in_plus",
+      "seed": {
+        "training": "published model",
+        "record": null,
+        "note": null,
+        "inference": 20260101
+      }
+    }
+  },
+  "not_run_by_plan": {
+    "nltk_pre": {
+      "plan_field": "configurations.nltk_pre.datasets",
+      "datasets": [
+        "ewt_test"
+      ]
+    },
+    "spacy_sm": {
+      "plan_field": "configurations.spacy_sm.datasets",
+      "datasets": [
+        "ewt_test"
+      ]
+    }
+  },
+  "failed": {},
+  "run": {
+    "command": "python scripts/pos_tagging.py --dataset gentle --confirmatory --out-dir results/run_2026-10-25",
+    "started": "2026-10-25T12:57:57+01:00",
+    "finished": "2026-10-25T13:04:43+01:00",
+    "max_sentences": null,
+    "confirmatory": true,
+    "sentences_scored": 1334,
+    "configurations": [
+      "rdr_ewt",
+      "nltk_ewt",
+      "udpipe_ewt",
+      "spacy_ewt",
+      "stanza_ewt",
+      "stanza_comb",
+      "stanza_trf"
+    ],
+    "completed": true
+  }
+}

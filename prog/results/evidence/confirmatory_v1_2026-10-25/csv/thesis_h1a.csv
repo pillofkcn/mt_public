@@ -1,0 +1,15 @@
+task,chain,dataset,status,lower,higher,lower_level,higher_level,m_lower,m_higher,delta,ci_low,ci_high,half_width,class,holds
+pos,pos_ewt,ewt_test,exploratory,nltk_ewt,stanza_ewt,L1,L3,93.8950,97.0073,3.1123,2.7689,3.4785,0.3548,better_by_more_than_delta,yes
+pos,pos_combined,ewt_test,exploratory,stanza_comb,stanza_trf,L3,L4,96.7682,97.8122,1.0441,0.8082,1.2905,0.2411,better_not_shown_by_delta,yes
+pos,pos_ewt,gentle,confirmatory,nltk_ewt,stanza_ewt,L1,L3,86.5667,91.1175,4.5508,3.3580,5.8003,1.2212,better_by_more_than_delta,yes
+pos,pos_combined,gentle,confirmatory,stanza_comb,stanza_trf,L3,L4,92.5221,94.1233,1.6012,0.8246,2.4447,0.8100,better_not_shown_by_delta,yes
+dep,dep_ewt,ewt_test,exploratory,nltk_arc,udpipe_ewt,L1,L2,75.9704,80.6089,4.6386,3.9990,5.2447,0.6228,better_by_more_than_delta,yes
+dep,dep_ewt,ewt_test,exploratory,udpipe_ewt,stanza_ewt,L2,L3,80.6089,88.4793,7.8704,7.1367,8.6327,0.7480,better_by_more_than_delta,yes
+dep,dep_combined,ewt_test,exploratory,stanza_comb,stanza_trf,L3,L4,88.4474,92.4564,4.0089,3.4695,4.5986,0.5646,better_by_more_than_delta,yes
+dep,dep_ewt,gentle,confirmatory,nltk_arc,udpipe_ewt,L1,L2,62.9530,68.1724,5.2194,3.8631,6.3854,1.2611,better_by_more_than_delta,yes
+dep,dep_ewt,gentle,confirmatory,udpipe_ewt,stanza_ewt,L2,L3,68.1724,78.0212,9.8489,7.8380,12.3409,2.2515,better_by_more_than_delta,yes
+dep,dep_combined,gentle,confirmatory,stanza_comb,stanza_trf,L3,L4,79.8472,86.3082,6.4610,5.2884,7.7411,1.2263,better_by_more_than_delta,yes
+con,con_stanza,wsj_01,exploratory,stanza_con,stanza_con_trf,L3,L4,92.9331,95.5819,2.6488,2.0819,3.1621,0.5401,better_by_more_than_delta,yes
+con,con_benepar,wsj_01,exploratory,stanza_con,benepar,L3,L4,92.9331,94.8943,1.9612,1.4761,2.4291,0.4765,better_by_more_than_delta,yes
+con,con_stanza,mctb_en,confirmatory,stanza_con,stanza_con_trf,L3,L4,82.4244,86.3184,3.8940,3.5242,4.2752,0.3755,better_by_more_than_delta,yes
+con,con_benepar,mctb_en,confirmatory,stanza_con,benepar,L3,L4,82.4244,86.5174,4.0930,3.7022,4.4827,0.3902,better_by_more_than_delta,yes

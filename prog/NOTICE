@@ -1,0 +1,80 @@
+# NOTICE — third-party tools, models and data
+
+The framework code in this repository is MIT-licensed (see LICENSE). It **wraps** external NLP
+tools and **downloads** external models and corpora at setup time; no tool, model or corpus file
+is redistributed here, and the frozen runs in `results/evidence/` hold per-sentence counts,
+tables and figures, not corpus text. The licences of the tools, models and corpora are their
+own and are listed below, because they differ — notably, GENTLE is non-commercial, the Penn
+Treebank sample is for non-commercial use only, and RDRPOSTagger's learner is GPL.
+
+## Wrapped tools and the models version 1.0 runs
+
+The configurations are those of `plan/v1.yaml`.
+
+| Tool | Licence | Models and use |
+|---|---|---|
+| NLTK | Apache-2.0 | `nltk_pre`: the shipped `averaged_perceptron_tagger_eng` (its training corpus is not stated in NLTK's documentation). `nltk_ewt`: the same perceptron trained here on EWT train. `pcfg_words`, `pcfg_tags`: a PCFG induced from WSJ section 00 of the `treebank` sample. `nltk_arc`: the TransitionParser, trained here on EWT train. NLTK also supplies the `treebank` sample (see Corpora) |
+| scikit-learn | BSD-3-Clause | The logistic-regression classifier of `nltk_arc` |
+| spaCy | MIT | `spacy_sm`: model `en_core_web_sm` 3.8.0 (MIT), trained on OntoNotes 5 (LDC2013T19) with a ClearNLP dependency conversion. `spacy_ewt`: a pipeline trained here on EWT train (`scripts/train_spacy.py`) |
+| Stanza | Apache-2.0 | `stanza_ewt`, `stanza_comb`: the `ewt` and `combined` packages, POS and dependency models trained on Universal Dependencies 2.15 (the 1.10+ model builds). `stanza_trf`: `combined` with the `combined_electra-large` POS and dependency models. `stanza_con`, `stanza_con_trf`: the constituency models `ptb3-revised_charlm` and `ptb3-revised_electra-large`, trained on the revised Penn Treebank. The `electra-large` models read the transformer `google/electra-large-discriminator` (Apache-2.0, fetched from the Hugging Face hub at a recorded revision) without changing it |
+| Benepar | MIT (the repository's `LICENSE`; the classifier of the PyPI package says Apache) | `benepar`: model `benepar_en3`, trained on the revised Penn Treebank, over spaCy `en_core_web_sm` |
+| SuPar | MIT | `supar_con`: model `crf-con-en`, trained on the Penn Treebank (WSJ 02–21) |
+| UDPipe 1 (`ufal.udpipe`) | MPL-2.0 | Library. `udpipe_ewt`: a model trained here on EWT train (`scripts/train_udpipe.py`); no published UDPipe model is used |
+| RDRPOSTagger | **GPL-3.0-or-later** (its `License.txt`; GitHub shows NOASSERTION only because that file paraphrases the licence) | `rdr_ewt`: rules learned here from EWT train by the authors' learner, run outside the repository. Neither the code nor the models are vendored here — see the note below |
+
+Every model trained here (`nltk_ewt`, `nltk_arc`, `spacy_ewt`, `udpipe_ewt`, `rdr_ewt`) is
+derived from UD_English-EWT train (CC BY-SA 4.0) and stays in the ignored `model_cache/`; none
+is redistributed.
+
+Two programs checked the scoring and are not part of this repository: the official CoNLL 2018
+evaluation script `conll18_ud_eval.py` (ÚFAL, Charles University; MPL-2.0) and EVALB (Sekine
+and Collins; the distribution at <https://nlp.cs.nyu.edu/evalb/> carries a public-domain
+dedication). The project's tests (not published here) ran them against the project's own
+scoring (`evaluation/metrics.py`, `evaluation/evalb.py`), which implements their rules and
+imports neither. The EVALB program those tests ran was compiled on 23 Oct 2026 from the
+unmodified `EVALB/evalb.c` of that distribution with the Zig 0.16.0 toolchain (the `ziglang`
+0.16.0 package from PyPI, outside the project's environment):
+
+    python -m ziglang cc -O2 -target x86_64-windows-gnu -w -o evalb.exe EVALB/evalb.c
+
+SHA-256 of the resulting `evalb.exe`:
+7e06c59d0acdb6a8bb919601dfb6fc38f60b638a63d735fca9362607ac35845b.
+
+## Corpora
+
+| Corpus | Licence | Use |
+|---|---|---|
+| UD_English-EWT (release r2.17) | CC BY-SA 4.0 | Test split: the exploratory test set for POS and dependencies (`ewt_test`). Train split: training data of `rdr_ewt`, `nltk_ewt`, `udpipe_ewt`, `spacy_ewt` and `nltk_arc` (`scripts/train_rdrpos.py`, `scripts/train_udpipe.py`, `scripts/train_spacy.py` and `scripts/train_nltk.py`; the trained files stay in the ignored `model_cache/`); the dev split is used while training. See `data/DATASET.md` |
+| Penn Treebank sample (via NLTK) | (C) LDC 1995, distributed with NLTK under fair use; non-commercial use only | WSJ section 01: the exploratory test set for constituents (`wsj_01`). Section 00: training data of the PCFG |
+| UD_English-GENTLE (UD 2.18) | **CC BY-NC-SA 4.0** — non-commercial | Confirmatory test set for POS and dependencies (`gentle`). Downloaded by `scripts/fetch_data.py`; not redistributed here, only its SHA-256 is tracked. See `data/DATASET.md` |
+| MCTB_en (Yang et al. 2022) | MIT | Confirmatory test set for constituents (`mctb_en`). Downloaded by `scripts/fetch_data.py` from a pinned commit; not redistributed here, only its SHA-256 is tracked. See `data/DATASET.md` |
+| LDC English Web Treebank (LDC2012T13) | LDC licence — **not used here** | Holds the original constituency trees of the EWT sentences; their unavailability is why the EWT has no constituency gold here |
+
+## RDRPOSTagger and the GPL
+
+This code is MIT-licensed, so GPL-3.0 sources are neither vendored nor imported at
+runtime. `wrappers/rdrpos.py` implements the SCRDR inference procedure itself from the
+published algorithm (Nguyen et al.). The implementation was checked for fidelity against the
+upstream tagger on the full EWT test split, with the authors' published model (trained on
+UD_English-EWT r2.4): **0 differences across all 25 094 words**. That model is not part of
+the plan and is not downloaded.
+
+The plan's `rdr_ewt` is retrained on the EWT train split with the authors' own learner.
+`scripts/train_rdrpos.py` downloads the learner (GPL-3.0-or-later) from the official
+repository at a pinned commit, checks each of its files against a recorded SHA-256, keeps it
+outside this repository (by default in `~/.cache/rdrpostagger/`) and runs it there as a
+separate program; nothing of it is imported or vendored. The `.RDR` and `.DICT` files it
+writes are derived from UD_English-EWT train (CC BY-SA 4.0), stay in the ignored
+`model_cache/rdrpos_ewt/` and are not redistributed. `wrappers/rdrpos.py` reads them with its
+own reader, which tags all 25 147 words of the EWT dev split as the learner's own tagger does.
+
+If the thesis cites this tagger, cite the software as GPL-3.0-or-later and credit its authors,
+Nguyen, Nguyen, Pham & Pham (2013-2019). That range dates the software, not a paper: the method
+is cited by the two papers `wrappers/rdrpos.py` names (2014 and 2016).
+
+## Licences worth flagging
+
+- **UD_English-GENTLE: CC BY-NC-SA 4.0** and the **Penn Treebank sample: non-commercial use
+  only** — fine for a thesis, not for commercial reuse. Neither is redistributed here.
+- **RDRPOSTagger's learner: GPL-3.0-or-later** — run as a separate program outside the
+  repository, never imported or vendored.

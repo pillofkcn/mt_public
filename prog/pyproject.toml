@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "syntactic-analysis"
+version = "1.0.0"
+description = "Comparison of tools for generating syntactic analysis (diploma thesis: Porovnanie nástrojov na generovanie syntaktickej analýzy)"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Martin Studený" }]
+# Python 3.14 is NOT supported: spaCy still depends on pydantic v1 there.
+requires-python = ">=3.10,<3.14"
+
+# The core package is not dependency-free: evaluation/evalb.py imports nltk.Tree
+# for bracket parsing, both the scripts and the evaluation package use numpy, and
+# plan.py reads plan/v1.yaml with PyYAML.
+dependencies = [
+    "numpy>=2.0,<3",
+    # Below 3.10: nltk 3.10 (3.10.4 checked) reads one tree of MCTB_en
+    # (dialogue) differently, Tree.fromstring refuses it, so fetch_data.py fails
+    # a file whose digest matches, and a scored set would lose a tree. 3.9.3
+    # (version 1.0) and 3.9.4 give the same counts.
+    "nltk>=3.9,<3.10",
+    "pyyaml>=6.0,<7",
+]
+
+[project.optional-dependencies]
+spacy   = ["spacy>=3.8,<3.9"]
+stanza  = ["stanza>=1.11,<2"]
+benepar = ["benepar>=0.2,<0.3", "spacy>=3.8,<3.9", "torch>=2.6"]
+supar   = ["supar>=1.1,<1.2", "torch>=2.6"]
+udpipe  = ["ufal.udpipe>=1.4,<2"]
+
+# What the NLTK-based analyzers need beyond the core: TransitionParser trains a
+# classifier through scikit-learn.
+nltk-extra = ["scikit-learn>=1.3,<2"]
+
+# RDRPOSTagger needs no package: it is not on PyPI, and the wrapper
+# (wrappers/rdrpos.py) implements the SCRDR inference itself and reads the two
+# model files scripts/train_rdrpos.py writes into model_cache/rdrpos_ewt/. The
+# learner is GPL-3.0-or-later; nothing of it is vendored, and
+# scripts/train_rdrpos.py runs it outside the repository.
+rdrpos  = []
+
+# The three figures (scripts/make_figures.py).
+figures = ["matplotlib>=3.7,<4"]
+
+# Everything the project measures with, by reference to the extras above, so
+# `all` repeats no range of its own. Two ranges stand twice among the extras,
+# because each extra must install on its own: spaCy's (spacy, benepar) and
+# torch's (benepar, supar); a change to either is made in both places. A
+# self-referencing extra needs pip 21.2 or newer; setup.sh upgrades pip before
+# it installs.
+all = ["syntactic-analysis[spacy,stanza,benepar,supar,udpipe,nltk-extra,figures]"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
